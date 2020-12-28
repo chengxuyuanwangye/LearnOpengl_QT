@@ -27,12 +27,19 @@
               }
 
     //VAO，VBO数据部分
-       GLfloat vertices[] = {
+    /*   GLfloat vertices[] = {
            -0.5f,  -0.5f, 0.0f,  // bottom left
             0.5f, -0.5f, 0.0f,  // bottom right
            0.0f, 0.5f, 0.0f,  // top
 
-       };
+       };*/
+             GLfloat vertices[] = {
+                  -0.5f,  -0.5f, 0.0f,  1.0f, 0.0f, 0.0f, // bottom left
+                   0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, // bottom right
+                  0.0f, 0.5f, 0.0f,   0.0f, 0.0f, 1.0f // top
+
+              };
+
        unsigned int indices[] = {  // note that we start from 0!
            0, 1, 2,
        };
@@ -53,9 +60,15 @@
 
        int attr = -1;
        attr = m_program->attributeLocation("aPos");
-       m_program->setAttributeBuffer(attr, GL_FLOAT, 0, 3, sizeof(GLfloat) * 3);
+       m_program->setAttributeBuffer(attr, GL_FLOAT, 0, 3, sizeof(GLfloat) * 6);
        m_program->enableAttributeArray(attr);
+       int colorattr=-1;
+       colorattr= m_program->attributeLocation("aColor");
+       m_program->setAttributeBuffer(colorattr, GL_FLOAT, sizeof(GLfloat) * 3, 3, sizeof(GLfloat) * 6);
+       m_program->enableAttributeArray(colorattr);
+
        m_vbo->release();
+
    }
 
    void Triangle::Render()

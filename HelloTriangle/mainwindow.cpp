@@ -49,15 +49,20 @@ void MainWindow:: createDockTool()
      btntriangle->setText("Triangle");
      QPushButton *btnrectangle=new QPushButton(contwidget);
      btnrectangle->setText("Rectangle");
+     QPushButton *btnanimate=new QPushButton(contwidget);
+     btnanimate->setText("startRotate");
 
      btnlayout->addWidget(btntriangle,0,0);
      btnlayout->addWidget(btnrectangle,1,0);
+     btnlayout->addWidget(btnanimate,2,0);
+
 
 
      contwidget->setLayout(btnlayout);
      toolpanel->setWidget(dockWidgetContents);
      connect(btntriangle,&QPushButton::clicked,this,&MainWindow::btntriangle_clicked);
      connect(btnrectangle,&QPushButton::clicked,this,&MainWindow::btnrectangle_clicked);
+     connect(btnanimate,&QPushButton::clicked,this,&MainWindow::btnanimate_clicked);
 }
 
 MainWindow::~MainWindow()
@@ -84,4 +89,9 @@ delete qss;
       Q_UNUSED(clicked);
       centreimgwidget->EnableRectangle();
       centreimgwidget->update();
+ }
+ void MainWindow::btnanimate_clicked(bool clicked)
+ {
+
+      centreimgwidget->StartAnimate(clicked);
  }

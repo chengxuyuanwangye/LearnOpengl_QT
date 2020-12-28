@@ -2,8 +2,11 @@
 #include<QOpenGLFunctions>
 #include<QOpenGLShaderProgram>
 #include<QDebug>
+#include<QTimer>
    Triangle::Triangle()
+       :m_frame(0)
    {
+
        initializeOpenGLFunctions();
 
        m_program = new QOpenGLShaderProgram(this);
@@ -27,13 +30,8 @@
               }
 
     //VAO，VBO数据部分
-    /*   GLfloat vertices[] = {
-           -0.5f,  -0.5f, 0.0f,  // bottom left
-            0.5f, -0.5f, 0.0f,  // bottom right
-           0.0f, 0.5f, 0.0f,  // top
 
-       };*/
-             GLfloat vertices[] = {
+       GLfloat vertices[] = {
                   -0.5f,  -0.5f, 0.0f,  1.0f, 0.0f, 0.0f, // bottom left
                    0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, // bottom right
                   0.0f, 0.5f, 0.0f,   0.0f, 0.0f, 1.0f // top
@@ -69,18 +67,32 @@
 
        m_vbo->release();
 
+
+
    }
+
 
    void Triangle::Render()
    {
        if(m_visible)
        {
-           m_program->bind();
+        m_program->bind();
        {
+        m_program->setUniformValue("matrix", m_rotmatrix);
        QOpenGLVertexArrayObject::Binder vaoBind(m_vao);
        glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, 0);
         m_vao->release();
        }
-       m_program->release();
+        m_program->release();
        }
    }
+
+    void Triangle::Animate()
+    {
+        m_rotmatrix.setToIdentity();
+        m_rotmatrix.perspective(60.0f, 4.0f/3.0f, 0.1f, 100.0f);
+        m_rotmatrix.translate(0, 0, -2);
+        m_rotmatrix.rotate(100.0f * m_frame /60, 0, 1, 0);
+        m_frame++;
+
+    }

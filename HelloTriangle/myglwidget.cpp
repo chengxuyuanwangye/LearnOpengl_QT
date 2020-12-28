@@ -10,9 +10,11 @@
 #include"rectangle.h"
 
 MyGLWidget::MyGLWidget(QWidget *parent):
-    QOpenGLWidget (parent)
+    QOpenGLWidget (parent),
+    animateflag(false)
 {
-
+    m_timer=new QTimer(this);
+    m_timer->setInterval(60);
 }
 
 
@@ -27,7 +29,9 @@ void MyGLWidget::initializeGL()
 {
     // 为当前环境初始化OpenGL函数
    initializeOpenGLFunctions();
-   shapevec.append(new Triangle);
+   Triangle* tri=new Triangle();
+   shapevec.append(tri);
+   connect(m_timer,&QTimer::timeout,this,&MyGLWidget::timeoutFunc);
    shapevec.append(new MyRectangle);
 
 
@@ -83,5 +87,37 @@ void MyGLWidget::EnableRectangle()
         }
     }
 }
+ void MyGLWidget::StartAnimate(bool flag)
+ {
+   animateflag=!animateflag;
+
+     if(animateflag)
+    {
+          qDebug()<<"start";
+         m_timer->start();
+
+     }
+     else {
+         m_timer->stop();
+     }
+
+ }
+
+ void MyGLWidget::timeoutFunc()
+ {
+     qDebug()<<"time out";
+     QVector<Shape*>::iterator i;
+     for(i=shapevec.begin();i!=shapevec.end();++i)
+     {
+         if( (*i)->inherits("Triangle"))
+         {
+             Shape* temp=*i;
+            Triangle* temptri= qobject_cast<Triangle *>(temp);
+             temptri->Animate();
+         }
+     }
+
+     update();
+ }
 
 

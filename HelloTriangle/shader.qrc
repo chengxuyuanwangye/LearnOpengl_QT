@@ -2,5 +2,7 @@
     <qresource prefix="/shader">
         <file>triangle.frag</file>
         <file>triangle.vert</file>
+        <file>myrectangle.frag</file>
+        <file>myrectangle.vert</file>
     </qresource>
 </RCC>

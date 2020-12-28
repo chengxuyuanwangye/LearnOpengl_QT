@@ -6,13 +6,13 @@ MyRectangle::MyRectangle()
 {
      initializeOpenGLFunctions();
      m_program = new QOpenGLShaderProgram(this);
-     bool success = m_program->addShaderFromSourceFile(QOpenGLShader::Vertex, ":/shader/triangle.vert");
+     bool success = m_program->addShaderFromSourceFile(QOpenGLShader::Vertex, ":/shader/myrectangle.vert");
       if (!success) {
           qDebug() << "shaderProgram addShaderFromSourceFile failed!" << m_program->log();
           return;
       }
       //加载片段着色器程序
-    success = m_program->addShaderFromSourceFile(QOpenGLShader::Fragment, ":/shader/triangle.frag");
+    success = m_program->addShaderFromSourceFile(QOpenGLShader::Fragment, ":/shader/myrectangle.frag");
     if (!success) {
         qDebug() << "shaderProgram addShaderFromSourceFile failed!" << m_program->log();
         return;

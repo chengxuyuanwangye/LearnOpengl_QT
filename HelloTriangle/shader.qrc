@@ -5,4 +5,7 @@
         <file>myrectangle.frag</file>
         <file>myrectangle.vert</file>
     </qresource>
+    <qresource prefix="/img">
+        <file>wall.jpg</file>
+    </qresource>
 </RCC>

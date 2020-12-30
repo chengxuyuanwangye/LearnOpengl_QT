@@ -105,7 +105,6 @@ void MyGLWidget::EnableRectangle()
 
  void MyGLWidget::timeoutFunc()
  {
-     qDebug()<<"time out";
      QVector<Shape*>::iterator i;
      for(i=shapevec.begin();i!=shapevec.end();++i)
      {

@@ -80,12 +80,13 @@ MyRectangle::MyRectangle(int width,int height)
     m_program->setUniformValue("model", model);
     QMatrix4x4 view;
     view.setToIdentity();
-    view.translate(QVector3D(0.0f,0.0f,-2.0f));
+    view.translate(QVector3D(0.0f,0.0f,-1.0f));
     m_program->setUniformValue("view", view);
     QMatrix4x4 projection;
     qDebug()<<"init projection";
     projection.setToIdentity();
-    projection.perspective(45.0f, 1.0f * m_width / m_height, 0.1f, 100.0f);
+    float temp=m_width>m_height?m_width:m_height;
+    projection.ortho(-1*m_width/temp, m_width/temp, -1*m_height/temp, m_height/temp, 0.1f, 100.0f);
     m_program->setUniformValue("projection", projection);
     m_program->release();
 
@@ -123,7 +124,9 @@ void  MyRectangle::Resize(int width, int height)
    {
       QMatrix4x4 projection;
       projection.setToIdentity();
-      projection.perspective(45.0f, 1.0f * width / height, 0.1f, 100.0f);
+     // projection.perspective(45.0f, 1.0f * width / height, 0.1f, 100.0f);
+      float temp=m_width>m_height?m_width:m_height;
+        projection.ortho(-1*m_width/temp, m_width/temp, -1*m_height/temp, m_height/temp, 0.1f, 100.0f);
       m_program->setUniformValue("projection", projection);
    }
     m_program->release();

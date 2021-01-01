@@ -53,8 +53,9 @@ void MainWindow:: createDockTool()
      btnanimate->setText("startRotate");
 
      btnlayout->addWidget(btntriangle,0,0);
-     btnlayout->addWidget(btnrectangle,1,0);
-     btnlayout->addWidget(btnanimate,2,0);
+     btnlayout->addWidget(btnanimate,1,0);
+     btnlayout->addWidget(btnrectangle,2,0);
+
 
 
 

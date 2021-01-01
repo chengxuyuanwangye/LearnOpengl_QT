@@ -6,10 +6,10 @@ class MyRectangle: public Shape
 {
      Q_OBJECT
 public:
-    MyRectangle();
+    MyRectangle(int width,int height);
     ~MyRectangle();
     virtual  void Render();
-
+    virtual void Resize(int width, int height);
 private:
     QOpenGLTexture * ourtexture;
 };

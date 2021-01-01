@@ -29,10 +29,10 @@ void MyGLWidget::initializeGL()
 {
     // 为当前环境初始化OpenGL函数
    initializeOpenGLFunctions();
-   Triangle* tri=new Triangle();
+   Triangle* tri=new Triangle(width(),height());
    shapevec.append(tri);
    connect(m_timer,&QTimer::timeout,this,&MyGLWidget::timeoutFunc);
-   shapevec.append(new MyRectangle);
+   shapevec.append(new MyRectangle(width(),height()));
 
 
 }
@@ -54,6 +54,12 @@ void MyGLWidget::resizeGL(int width, int height)
 {
 const qreal retinascale=devicePixelRatio();
 glViewport(0,0,width*retinascale,height*retinascale);
+
+QVector<Shape*>::iterator i;
+for(i=shapevec.begin();i!=shapevec.end();++i)
+{
+    (*i)->Resize(width,height);
+}
 }
 
 

@@ -3,7 +3,8 @@
 #include<QOpenGLShaderProgram>
 #include<QDebug>
 #include<QOpenGLTexture>
-MyRectangle::MyRectangle()
+MyRectangle::MyRectangle(int width,int height)
+       :Shape(width,height)
 {
      initializeOpenGLFunctions();
      m_program = new QOpenGLShaderProgram(this);
@@ -59,6 +60,7 @@ MyRectangle::MyRectangle()
     texattr=m_program->attributeLocation("aTexCoord");
     m_program->setAttributeBuffer(texattr,GL_FLOAT,sizeof(GLfloat) * 3,2,sizeof(GLfloat) * 5);
     m_program->enableAttributeArray(texattr);
+
     m_vbo->release();
 
     ourtexture=new QOpenGLTexture(QImage(":/img/wall.jpg"), QOpenGLTexture::GenerateMipMaps);
@@ -72,6 +74,20 @@ MyRectangle::MyRectangle()
         ourtexture->setMinificationFilter(QOpenGLTexture::Linear);
         ourtexture->setMagnificationFilter(QOpenGLTexture::Linear);
     }
+    m_program->bind();
+    QMatrix4x4 model;
+    model.setToIdentity();
+    m_program->setUniformValue("model", model);
+    QMatrix4x4 view;
+    view.setToIdentity();
+    view.translate(QVector3D(0.0f,0.0f,-2.0f));
+    m_program->setUniformValue("view", view);
+    QMatrix4x4 projection;
+    qDebug()<<"init projection";
+    projection.setToIdentity();
+    projection.perspective(45.0f, 1.0f * m_width / m_height, 0.1f, 100.0f);
+    m_program->setUniformValue("projection", projection);
+    m_program->release();
 
 
 }
@@ -86,8 +102,9 @@ void MyRectangle::Render()
     {
     m_program->bind();
     {
+
     glActiveTexture(GL_TEXTURE0);
-     ourtexture->bind();
+    ourtexture->bind();
     QOpenGLVertexArrayObject::Binder vaoBind(m_vao);
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
      m_vao->release();
@@ -95,5 +112,24 @@ void MyRectangle::Render()
     }
     m_program->release();
     }
+
+}
+
+void  MyRectangle::Resize(int width, int height)
+{
+    m_width=width;
+    m_height=height;
+    m_program->bind();
+   {
+      QMatrix4x4 projection;
+      projection.setToIdentity();
+      projection.perspective(45.0f, 1.0f * width / height, 0.1f, 100.0f);
+      m_program->setUniformValue("projection", projection);
+   }
+    m_program->release();
+
+
+
+
 
 }

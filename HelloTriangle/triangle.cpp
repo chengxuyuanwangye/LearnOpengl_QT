@@ -3,8 +3,9 @@
 #include<QOpenGLShaderProgram>
 #include<QDebug>
 #include<QTimer>
-   Triangle::Triangle()
-       :m_frame(0)
+   Triangle::Triangle(int width,int height)
+       :Shape(width,height),
+         m_frame(0)
    {
 
        initializeOpenGLFunctions();
@@ -66,6 +67,17 @@
        m_program->enableAttributeArray(colorattr);
 
        m_vbo->release();
+       m_program->bind();
+       QMatrix4x4 model;
+       model.setToIdentity();
+       m_program->setUniformValue("model", model);
+       QMatrix4x4 view;
+       view.translate(QVector3D(0.0f,0.0f,-2.0f));
+       m_program->setUniformValue("view", view);
+       QMatrix4x4 projection;
+       projection.perspective(45.0f, 1.0f * m_width / m_height, 0.1f, 100.0f);
+       m_program->setUniformValue("projection", projection);
+       m_program->release();
 
 
 
@@ -78,8 +90,9 @@
        {
         m_program->bind();
        {
-        m_program->setUniformValue("matrix", m_rotmatrix);
-       QOpenGLVertexArrayObject::Binder vaoBind(m_vao);
+        QMatrix4x4 model;
+        m_program->setUniformValue("model", model*m_rotmatrix);
+        QOpenGLVertexArrayObject::Binder vaoBind(m_vao);
        glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, 0);
         m_vao->release();
        }
@@ -90,9 +103,23 @@
     void Triangle::Animate()
     {
         m_rotmatrix.setToIdentity();
-        m_rotmatrix.perspective(60.0f, 4.0f/3.0f, 0.1f, 100.0f);
-        m_rotmatrix.translate(0, 0, -2);
+      //  m_rotmatrix.perspective(60.0f, 4.0f/3.0f, 0.1f, 100.0f);
+     //   m_rotmatrix.translate(0, 0, -2);
         m_rotmatrix.rotate(100.0f * m_frame /60, 0, 1, 0);
         m_frame++;
+
+    }
+
+    void Triangle::Resize(int width, int height)
+    {
+        m_width=width;
+        m_height=height;
+        m_program->bind();
+       {
+          QMatrix4x4 projection;
+          projection.perspective(45.0f, 1.0f * width / height, 0.1f, 100.0f);
+          m_program->setUniformValue("projection", projection);
+       }
+        m_program->release();
 
     }

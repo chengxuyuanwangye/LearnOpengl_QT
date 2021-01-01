@@ -7,8 +7,9 @@ class Triangle: public Shape
 {
  Q_OBJECT
 public:
-    Triangle();
+    Triangle(int width,int height);
     virtual  void Render();
+    virtual void Resize(int width, int height);
 public slots:
     void Animate();
 private:

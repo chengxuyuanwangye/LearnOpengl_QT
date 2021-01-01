@@ -1,8 +1,10 @@
 #include "shape.h"
 
-Shape::Shape()
+Shape::Shape(int width,int height)
 : QObject(nullptr),
-  m_visible(false)
+  m_visible(false),
+  m_width(width),
+  m_height(height)
 {
 
 }
@@ -25,5 +27,10 @@ void Shape::Render()
  void Shape::ChangeVisible(bool flag)
  {
      m_visible=flag;
+ }
+
+ void Shape::Resize(int width, int height)
+ {
+
  }
 

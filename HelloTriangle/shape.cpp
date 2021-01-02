@@ -12,10 +12,13 @@ Shape::Shape(int width,int height)
 Shape::~Shape()
 {
     m_vbo->destroy();
-    m_ebo->destroy();
+    if(m_ebo!=nullptr){
+        m_ebo->destroy();
+        delete m_ebo;
+    }
     m_vao->destroy();
     delete m_vbo;
-    delete m_ebo;
+
     delete m_vao;
 }
 

@@ -6,8 +6,8 @@
 #include<QDebug>
 #include"shape.h"
 #include"triangle.h"
-
 #include"rectangle.h"
+#include"cube.h"
 
 MyGLWidget::MyGLWidget(QWidget *parent):
     QOpenGLWidget (parent),
@@ -33,8 +33,11 @@ void MyGLWidget::initializeGL()
    shapevec.append(tri);
    connect(m_timer,&QTimer::timeout,this,&MyGLWidget::timeoutFunc);
    shapevec.append(new MyRectangle(width(),height()));
+   Cube* cub=new Cube(width(),height());
+   shapevec.append(cub);
+  // cub->ChangeVisible(true);
 
-
+  glEnable(GL_DEPTH_TEST);
 }
 
 void MyGLWidget::paintGL()
@@ -93,7 +96,22 @@ void MyGLWidget::EnableRectangle()
         }
     }
 }
- void MyGLWidget::StartAnimate(bool flag)
+void MyGLWidget::EnableCube()
+{
+    QVector<Shape*>::iterator i;
+    for(i=shapevec.begin();i!=shapevec.end();++i)
+    {
+        if((*i)->inherits("Cube"))
+        {
+            (*i)->ChangeVisible(true);
+        }
+        else {
+            (*i)->ChangeVisible(false);
+        }
+    }
+}
+
+void MyGLWidget::StartAnimate(bool flag)
  {
    animateflag=!animateflag;
 
@@ -116,9 +134,15 @@ void MyGLWidget::EnableRectangle()
      {
          if( (*i)->inherits("Triangle"))
          {
-             Shape* temp=*i;
+            Shape* temp=*i;
             Triangle* temptri= qobject_cast<Triangle *>(temp);
-             temptri->Animate();
+            temptri->Animate();
+         }
+         else if((*i)->inherits("Cube"))
+         {
+             Shape* temp=*i;
+             Cube* tempcube= qobject_cast<Cube *>(temp);
+             tempcube->Animate();
          }
      }
 

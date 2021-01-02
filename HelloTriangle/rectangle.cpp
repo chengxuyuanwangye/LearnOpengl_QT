@@ -83,11 +83,11 @@ MyRectangle::MyRectangle(int width,int height)
     view.translate(QVector3D(0.0f,0.0f,-1.0f));
     m_program->setUniformValue("view", view);
     QMatrix4x4 projection;
-    qDebug()<<"init projection";
     projection.setToIdentity();
     float temp=m_width>m_height?m_width:m_height;
     projection.ortho(-1*m_width/temp, m_width/temp, -1*m_height/temp, m_height/temp, 0.1f, 100.0f);
     m_program->setUniformValue("projection", projection);
+    m_program->setUniformValue("ourTexture", 0);
     m_program->release();
 
 
@@ -130,9 +130,5 @@ void  MyRectangle::Resize(int width, int height)
       m_program->setUniformValue("projection", projection);
    }
     m_program->release();
-
-
-
-
 
 }

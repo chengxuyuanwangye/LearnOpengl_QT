@@ -78,9 +78,6 @@
        projection.perspective(45.0f, 1.0f * m_width / m_height, 0.1f, 100.0f);
        m_program->setUniformValue("projection", projection);
        m_program->release();
-
-
-
    }
 
 
@@ -93,7 +90,7 @@
         QMatrix4x4 model;
         m_program->setUniformValue("model", model*m_rotmatrix);
         QOpenGLVertexArrayObject::Binder vaoBind(m_vao);
-       glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, 0);
+        glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, 0);
         m_vao->release();
        }
         m_program->release();

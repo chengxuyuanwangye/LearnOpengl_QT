@@ -1,6 +1,7 @@
 QT +=widgets
 
 HEADERS += \
+    cube.h \
     mainwindow.h \
     myglwidget.h \
     rectangle.h \
@@ -8,6 +9,7 @@ HEADERS += \
     triangle.h
 
 SOURCES += \
+    cube.cpp \
     main.cpp \
     mainwindow.cpp \
     myglwidget.cpp \

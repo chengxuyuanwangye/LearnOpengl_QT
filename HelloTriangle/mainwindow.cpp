@@ -52,9 +52,13 @@ void MainWindow:: createDockTool()
      QPushButton *btnanimate=new QPushButton(contwidget);
      btnanimate->setText("startRotate");
 
+     QPushButton *btncube=new QPushButton(contwidget);
+     btncube->setText("Cube");
+
      btnlayout->addWidget(btntriangle,0,0);
      btnlayout->addWidget(btnanimate,1,0);
      btnlayout->addWidget(btnrectangle,2,0);
+     btnlayout->addWidget(btncube,3,0);
 
 
 
@@ -64,6 +68,7 @@ void MainWindow:: createDockTool()
      connect(btntriangle,&QPushButton::clicked,this,&MainWindow::btntriangle_clicked);
      connect(btnrectangle,&QPushButton::clicked,this,&MainWindow::btnrectangle_clicked);
      connect(btnanimate,&QPushButton::clicked,this,&MainWindow::btnanimate_clicked);
+     connect(btncube,&QPushButton::clicked,this,&MainWindow::btncube_clicked);
 }
 
 MainWindow::~MainWindow()
@@ -95,4 +100,10 @@ delete qss;
  {
 
       centreimgwidget->StartAnimate(clicked);
+ }
+ void MainWindow::btncube_clicked(bool clicked)
+ {
+     Q_UNUSED(clicked);
+     centreimgwidget->EnableCube();
+     centreimgwidget->update();
  }

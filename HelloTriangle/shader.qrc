@@ -4,8 +4,11 @@
         <file>triangle.vert</file>
         <file>myrectangle.frag</file>
         <file>myrectangle.vert</file>
+        <file>cube.frag</file>
+        <file>cube.vert</file>
     </qresource>
     <qresource prefix="/img">
         <file>wall.jpg</file>
+        <file>container.jpg</file>
     </qresource>
 </RCC>

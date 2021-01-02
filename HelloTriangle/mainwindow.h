@@ -25,6 +25,7 @@ private:
     void btntriangle_clicked(bool);
     void btnrectangle_clicked(bool);
     void btnanimate_clicked(bool);
+    void btncube_clicked(bool);
 };
 
 #endif // MAINWINDOW_H

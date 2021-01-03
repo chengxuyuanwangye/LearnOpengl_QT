@@ -7,6 +7,7 @@ Shape::Shape(int width,int height)
   m_height(height)
 {
 
+
 }
 
 Shape::~Shape()
@@ -20,6 +21,7 @@ Shape::~Shape()
     delete m_vbo;
 
     delete m_vao;
+
 }
 
 void Shape::Render()

@@ -5,6 +5,7 @@
 #include<QOpenGLVertexArrayObject>
 #include<QOpenGLFunctions>
 class QOpenGLShaderProgram;
+class Camera;
 
 class Shape : public QObject,protected QOpenGLFunctions
 {
@@ -15,7 +16,7 @@ public:
     virtual void Render()=0;
     void ChangeVisible(bool flag);
     virtual void Resize(int width, int height)=0;
-
+    Camera* ShapeCamera;
 protected:
     QOpenGLBuffer* m_vbo;//顶点缓冲对象
     QOpenGLBuffer* m_ebo;//索引缓冲对象
@@ -24,6 +25,7 @@ protected:
     bool m_visible;
     int m_width;
     int m_height;
+
 
 };
 

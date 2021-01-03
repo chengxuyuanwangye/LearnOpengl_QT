@@ -4,6 +4,7 @@
 #include<QDebug>
 #include<QOpenGLTexture>
 #include<QTimer>
+#include"camera.h"
 Cube::Cube(int width,int height):
     Shape(width,height),
     m_frame(0)
@@ -121,8 +122,6 @@ Cube::Cube(int width,int height):
    m_program->setUniformValue("ourTexture", 0);
    m_program->release();
 
-
-
 }
 
 Cube::~Cube()
@@ -137,13 +136,18 @@ void Cube::Render()
     {
     glActiveTexture(GL_TEXTURE0);
     ourtexture->bind();
-    QMatrix4x4 view;
-    view.setToIdentity();
-    float radius = 5.0f;
-    float camX   = sin(100.0f * m_frame /30) * radius;
-    float camZ   = cos(100.0f * m_frame /30) * radius;
-    view.lookAt(QVector3D(camX,0.0f,camZ),QVector3D(0.0f,0.0f,0.0f),QVector3D(0.0f,1.0f,0.0f));
+    QMatrix4x4 view=ShapeCamera->GetViewMatrix();
+   // view.setToIdentity();
+   // float radius = 5.0f;
+   // float camX   = sin(100.0f * m_frame /30) * radius;
+    //float camZ   = cos(100.0f * m_frame /30) * radius;
+  //  view.lookAt(QVector3D(camX,0.0f,camZ),QVector3D(0.0f,0.0f,0.0f),QVector3D(0.0f,1.0f,0.0f));
     m_program->setUniformValue("view", view);
+
+    QMatrix4x4 projection;
+    projection.perspective(ShapeCamera->Zoom, 1.0f * m_width / m_height, 0.1f, 100.0f);
+    m_program->setUniformValue("projection", projection);
+
     QOpenGLVertexArrayObject::Binder vaoBind(m_vao);
     glDrawArrays(GL_TRIANGLES, 0, 36);
     ourtexture->release();
@@ -160,7 +164,7 @@ void  Cube::Resize(int width, int height)
     m_program->bind();
    {
       QMatrix4x4 projection;
-      projection.perspective(45.0f, 1.0f * width / height, 0.1f, 100.0f);
+      projection.perspective(ShapeCamera->Zoom, 1.0f * width / height, 0.1f, 100.0f);
       m_program->setUniformValue("projection", projection);
    }
     m_program->release();

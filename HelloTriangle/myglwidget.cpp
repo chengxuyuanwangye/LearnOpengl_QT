@@ -8,13 +8,27 @@
 #include"triangle.h"
 #include"rectangle.h"
 #include"cube.h"
-
+#include"camera.h"
+#include<QKeyEvent>
+#include<QMouseEvent>
 MyGLWidget::MyGLWidget(QWidget *parent):
     QOpenGLWidget (parent),
-    animateflag(false)
+    animateflag(false),
+    firstMouse(true),
+    leftbuttonpressed(false),
+    deltaTime(0.0f),
+    lastFrame(0.0f)
 {
     m_timer=new QTimer(this);
     m_timer->setInterval(60);
+    m_camera=new Camera(QVector3D(0.0f,0.0f,3.0f));
+    lastX = width() / 2.0f;
+    lastY = height() / 2.0f;
+    //test
+    deltaTime=1.0f;
+    setFocusPolicy(Qt::StrongFocus);
+    connect(m_timer,&QTimer::timeout,this,&MyGLWidget::timeoutFunc);
+
 }
 
 
@@ -22,6 +36,7 @@ MyGLWidget::~MyGLWidget()
 {
 
     qDeleteAll(shapevec);
+    delete m_camera;
 
 }
 
@@ -30,13 +45,15 @@ void MyGLWidget::initializeGL()
     // 为当前环境初始化OpenGL函数
    initializeOpenGLFunctions();
    Triangle* tri=new Triangle(width(),height());
+   tri->ShapeCamera=m_camera;
    shapevec.append(tri);
-   connect(m_timer,&QTimer::timeout,this,&MyGLWidget::timeoutFunc);
-   shapevec.append(new MyRectangle(width(),height()));
+   MyRectangle * rect=new MyRectangle(width(),height());
+   shapevec.append(rect);
+   rect->ShapeCamera=m_camera;
    Cube* cub=new Cube(width(),height());
    shapevec.append(cub);
+   cub->ShapeCamera=m_camera;
   // cub->ChangeVisible(true);
-
   glEnable(GL_DEPTH_TEST);
 }
 
@@ -146,6 +163,84 @@ void MyGLWidget::StartAnimate(bool flag)
          }
      }
 
+     update();
+ }
+
+
+ void MyGLWidget::keyPressEvent(QKeyEvent *event)
+ {
+     switch (event->key()) {
+     case Qt::Key_W:
+     {
+         m_camera->ProcessKeyboard(FORWARD,deltaTime);
+         break;
+     }
+     case Qt::Key_S:
+     {
+         m_camera->ProcessKeyboard(BACKWARD,deltaTime);
+         break;
+     }
+     case Qt::Key_D:
+     {
+         m_camera->ProcessKeyboard(LEFT,deltaTime);
+         break;
+     }
+     case Qt::Key_A:
+     {
+         m_camera->ProcessKeyboard(RIGHT,deltaTime);
+         break;
+     }
+     default:
+     {
+         break;
+     }
+     }
+     update();
+ }
+
+ void MyGLWidget::keyReleaseEvent(QKeyEvent *event)
+ {
+     Q_UNUSED(event);
+     qDebug()<<"keyrelease";
+ }
+
+ void MyGLWidget::mousePressEvent(QMouseEvent *event)
+ {
+  if(Qt::LeftButton== event->button())
+  {
+      lastX =event->pos().x();
+      lastY = event->pos().y();
+      leftbuttonpressed=true;
+      update();
+  }
+ }
+
+ void MyGLWidget::mouseReleaseEvent(QMouseEvent *event)
+ {
+      Q_UNUSED(event);
+    leftbuttonpressed=false;
+ }
+
+ void MyGLWidget::mouseMoveEvent(QMouseEvent *event)
+ {
+   if(leftbuttonpressed)
+   {
+       int xpos = event->pos().x();
+       int ypos = event->pos().y();
+       int xoffset = xpos - lastX;
+       int yoffset =lastY - ypos;// reversed since y-coordinates go from bottom to top
+       lastX= event->pos().x();
+       lastY= event->pos().y();
+       m_camera->ProcessMouseMovement(-1*xoffset, -yoffset);
+       update();
+   }
+
+ }
+
+ void MyGLWidget::wheelEvent(QWheelEvent *event)
+ {
+     QPoint offset = event->angleDelta();
+     m_camera->ProcessMouseScroll(offset.y()/20.0f);
      update();
  }
 

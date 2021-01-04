@@ -8,6 +8,8 @@
 #include"triangle.h"
 #include"rectangle.h"
 #include"cube.h"
+#include"colorcube.h"
+#include"lightcube.h"
 #include"camera.h"
 #include<QKeyEvent>
 #include<QMouseEvent>
@@ -53,6 +55,18 @@ void MyGLWidget::initializeGL()
    Cube* cub=new Cube(width(),height());
    shapevec.append(cub);
    cub->ShapeCamera=m_camera;
+   ColorCube* colcube=new ColorCube(width(),height());
+   shapevec.append(colcube);
+  // colcube->SetTranslate(QVector3D(1.2f, 1.0f, 2.0f));
+   colcube->ShapeCamera=m_camera;
+   LightCube *lightcube=new LightCube(width(),height());
+   shapevec.append(lightcube);
+  // lightcube->SetTranslate(QVector3D(1.2f, 1.0f, 2.0f));
+    lightcube->SetTranslate(QVector3D(1.2f, 1.0f, 2.0f));
+   lightcube->SetScale(QVector3D(0.2f,0.2f,0.2f));
+   lightcube->ShapeCamera=m_camera;
+
+
   // cub->ChangeVisible(true);
   glEnable(GL_DEPTH_TEST);
 }
@@ -242,6 +256,24 @@ void MyGLWidget::StartAnimate(bool flag)
      QPoint offset = event->angleDelta();
      m_camera->ProcessMouseScroll(offset.y()/20.0f);
      update();
+ }
+
+ void MyGLWidget::EnableColorCube()
+ {
+     QVector<Shape*>::iterator i;
+     for(i=shapevec.begin();i!=shapevec.end();++i)
+     {
+         if((*i)->inherits("ColorCube"))
+         {
+             (*i)->ChangeVisible(true);
+         }
+         else if ((*i)->inherits("LightCube")) {
+               (*i)->ChangeVisible(true);
+         }
+         else {
+             (*i)->ChangeVisible(false);
+         }
+     }
  }
 
 

@@ -6,6 +6,10 @@
         <file>myrectangle.vert</file>
         <file>cube.frag</file>
         <file>cube.vert</file>
+        <file>colorcube.frag</file>
+        <file>colorcube.vert</file>
+        <file>lightcube.frag</file>
+        <file>lightcube.vert</file>
     </qresource>
     <qresource prefix="/img">
         <file>wall.jpg</file>

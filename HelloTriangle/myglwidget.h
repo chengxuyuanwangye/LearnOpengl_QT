@@ -16,6 +16,7 @@ public:
     void EnableRectangle();
     void StartAnimate(bool flag);
     void EnableCube();
+    void EnableColorCube();
 
 protected:
     void initializeGL()Q_DECL_OVERRIDE;

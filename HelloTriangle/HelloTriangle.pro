@@ -2,7 +2,9 @@ QT +=widgets
 
 HEADERS += \
     camera.h \
+    colorcube.h \
     cube.h \
+    lightcube.h \
     mainwindow.h \
     myglwidget.h \
     rectangle.h \
@@ -11,7 +13,9 @@ HEADERS += \
 
 SOURCES += \
     camera.cpp \
+    colorcube.cpp \
     cube.cpp \
+    lightcube.cpp \
     main.cpp \
     mainwindow.cpp \
     myglwidget.cpp \

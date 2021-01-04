@@ -55,10 +55,16 @@ void MainWindow:: createDockTool()
      QPushButton *btncube=new QPushButton(contwidget);
      btncube->setText("Cube");
 
+     QPushButton *btncolortest=new QPushButton(contwidget);
+     btncolortest->setText("colortest");
+
+
      btnlayout->addWidget(btntriangle,0,0);
      btnlayout->addWidget(btnanimate,1,0);
      btnlayout->addWidget(btnrectangle,2,0);
      btnlayout->addWidget(btncube,3,0);
+     btnlayout->addWidget(btncolortest,4,0);
+
 
 
 
@@ -69,6 +75,7 @@ void MainWindow:: createDockTool()
      connect(btnrectangle,&QPushButton::clicked,this,&MainWindow::btnrectangle_clicked);
      connect(btnanimate,&QPushButton::clicked,this,&MainWindow::btnanimate_clicked);
      connect(btncube,&QPushButton::clicked,this,&MainWindow::btncube_clicked);
+     connect(btncolortest,&QPushButton::clicked,this,&MainWindow::btncolortest_clicked);
 }
 
 MainWindow::~MainWindow()
@@ -105,5 +112,11 @@ delete qss;
  {
      Q_UNUSED(clicked);
      centreimgwidget->EnableCube();
+     centreimgwidget->update();
+ }
+
+ void MainWindow::btncolortest_clicked(bool)
+ {
+     centreimgwidget->EnableColorCube();
      centreimgwidget->update();
  }

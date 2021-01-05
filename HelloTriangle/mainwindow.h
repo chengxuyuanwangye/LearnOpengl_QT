@@ -27,6 +27,7 @@ private:
     void btnanimate_clicked(bool);
     void btncube_clicked(bool);
     void btncolortest_clicked(bool);
+    void aimbientValueChanged(int);
 };
 
 #endif // MAINWINDOW_H

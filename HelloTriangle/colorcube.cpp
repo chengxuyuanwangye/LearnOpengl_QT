@@ -8,7 +8,9 @@
 ColorCube::ColorCube(int width,int height):
     Shape(width,height),
     m_frame(0),
-    m_modeltransmat(0,0,0)
+    m_modeltransmat(0,0,0),
+    m_lightPosition(0,0,0),
+    ambientStrength(0.1f)
 {
   initializeOpenGLFunctions();
   m_program = new QOpenGLShaderProgram(this);
@@ -33,49 +35,49 @@ ColorCube::ColorCube(int width,int height):
 
 //VAO，VBO数据部分
    float vertices[] = {
-           -0.5f, -0.5f, -0.5f,
-            0.5f, -0.5f, -0.5f,
-            0.5f,  0.5f, -0.5f,
-            0.5f,  0.5f, -0.5f,
-           -0.5f,  0.5f, -0.5f,
-           -0.5f, -0.5f, -0.5f,
-
-           -0.5f, -0.5f,  0.5f,
-            0.5f, -0.5f,  0.5f,
-            0.5f,  0.5f,  0.5f,
-            0.5f,  0.5f,  0.5f,
-           -0.5f,  0.5f,  0.5f,
-           -0.5f, -0.5f,  0.5f,
-
-           -0.5f,  0.5f,  0.5f,
-           -0.5f,  0.5f, -0.5f,
-           -0.5f, -0.5f, -0.5f,
-           -0.5f, -0.5f, -0.5f,
-           -0.5f, -0.5f,  0.5f,
-           -0.5f,  0.5f,  0.5f,
-
-            0.5f,  0.5f,  0.5f,
-            0.5f,  0.5f, -0.5f,
-            0.5f, -0.5f, -0.5f,
-            0.5f, -0.5f, -0.5f,
-            0.5f, -0.5f,  0.5f,
-            0.5f,  0.5f,  0.5f,
-
-           -0.5f, -0.5f, -0.5f,
-            0.5f, -0.5f, -0.5f,
-            0.5f, -0.5f,  0.5f,
-            0.5f, -0.5f,  0.5f,
-           -0.5f, -0.5f,  0.5f,
-           -0.5f, -0.5f, -0.5f,
-
-           -0.5f,  0.5f, -0.5f,
-            0.5f,  0.5f, -0.5f,
-            0.5f,  0.5f,  0.5f,
-            0.5f,  0.5f,  0.5f,
-           -0.5f,  0.5f,  0.5f,
-           -0.5f,  0.5f, -0.5f,
-       };
-
+       //--vertice           //--normal
+       -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
+        0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f, 
+        0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f, 
+        0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f, 
+       -0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f, 
+       -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f, 
+   
+       -0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
+        0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
+        0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
+        0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
+       -0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
+       -0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
+   
+       -0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
+       -0.5f,  0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
+       -0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
+       -0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
+       -0.5f, -0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
+       -0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
+   
+        0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
+        0.5f,  0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
+        0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
+        0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
+        0.5f, -0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
+        0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
+   
+       -0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
+        0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
+        0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
+        0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
+       -0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
+       -0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
+   
+       -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,
+        0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,
+        0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
+        0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
+       -0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
+       -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f
+   };
    m_vao=new QOpenGLVertexArrayObject;
    m_vbo=new QOpenGLBuffer(QOpenGLBuffer::VertexBuffer);
 
@@ -85,8 +87,13 @@ ColorCube::ColorCube(int width,int height):
    m_vbo->allocate(vertices, sizeof(vertices));
    int attr = -1;
    attr = m_program->attributeLocation("aPos");
-   m_program->setAttributeBuffer(attr, GL_FLOAT, 0, 3, sizeof(GLfloat) * 3);
+   m_program->setAttributeBuffer(attr, GL_FLOAT, 0, 3, sizeof(GLfloat) * 6);
    m_program->enableAttributeArray(attr);
+   int nattr=-1;
+   nattr=m_program->attributeLocation("aNormal");
+   m_program->setAttributeBuffer(nattr, GL_FLOAT, 3*sizeof(GLfloat), 3, sizeof(GLfloat) * 6);
+   m_program->enableAttributeArray(nattr);
+   
    m_vbo->release();
    m_vao->release();
    m_program->bind();
@@ -104,8 +111,9 @@ ColorCube::ColorCube(int width,int height):
    projection.perspective(45.0f, 1.0f * width / height, 0.1f, 100.0f);
    m_program->setUniformValue("projection", projection);
 
-   m_program->setUniformValue("objectcolor", QVector3D(1.0f, 0.5f, 0.31f));
-   m_program->setUniformValue("lightcolor", QVector3D(1.0f, 1.0f, 1.0f));
+   m_program->setUniformValue("objectColor", QVector3D(1.0f, 0.5f, 0.31f));
+   m_program->setUniformValue("lightColor", QVector3D(1.0f, 1.0f, 1.0f));
+   m_program->setUniformValue("ambientStrength", ambientStrength);
    m_program->release();
 }
 
@@ -119,7 +127,8 @@ void ColorCube::Render()
     {
     m_program->bind();
     {
-
+    m_program->setUniformValue("ambientStrength", ambientStrength);
+    m_program->setUniformValue("lightPos",QVector3D(1.2f,1.0f,2.0f));
     QMatrix4x4 view=ShapeCamera->GetViewMatrix();
     m_program->setUniformValue("view", view);
 
@@ -152,6 +161,7 @@ void  ColorCube::Resize(int width, int height)
 
 void ColorCube::Animate()
 {
+    //change the location of m_lightPosition
     m_frame++;
 }
 
@@ -171,5 +181,20 @@ void ColorCube::Animate()
 
 
  }
+
+  void ColorCube::SetLightPosition(QVector3D lightpos)
+  {
+
+
+  }
+  void  ColorCube:: SetAmbientStrength(float strength)
+  {
+      ambientStrength=strength;
+      m_program->bind();
+      {
+          m_program->setUniformValue("ambientStrength", ambientStrength);
+      }
+      m_program->release();
+  }
 
 

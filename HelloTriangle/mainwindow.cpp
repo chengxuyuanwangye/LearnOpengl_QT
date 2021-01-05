@@ -8,6 +8,7 @@
 #include<QDebug>
 #include<QSurfaceFormat>
 #include <QLabel>
+#include<QSlider>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent)
@@ -57,6 +58,14 @@ void MainWindow:: createDockTool()
 
      QPushButton *btncolortest=new QPushButton(contwidget);
      btncolortest->setText("colortest");
+     QSlider * aimbientSlider=new QSlider(contwidget);
+     aimbientSlider->setOrientation(Qt::Horizontal);
+     aimbientSlider->setMinimum(0);
+     aimbientSlider->setMaximum(10);
+     aimbientSlider->setSingleStep(1);
+     aimbientSlider->setValue(1);
+
+
 
 
      btnlayout->addWidget(btntriangle,0,0);
@@ -64,6 +73,7 @@ void MainWindow:: createDockTool()
      btnlayout->addWidget(btnrectangle,2,0);
      btnlayout->addWidget(btncube,3,0);
      btnlayout->addWidget(btncolortest,4,0);
+     btnlayout->addWidget(aimbientSlider,5,0);
 
 
 
@@ -76,6 +86,7 @@ void MainWindow:: createDockTool()
      connect(btnanimate,&QPushButton::clicked,this,&MainWindow::btnanimate_clicked);
      connect(btncube,&QPushButton::clicked,this,&MainWindow::btncube_clicked);
      connect(btncolortest,&QPushButton::clicked,this,&MainWindow::btncolortest_clicked);
+     connect(aimbientSlider,&QSlider::valueChanged,this,&MainWindow::aimbientValueChanged);
 }
 
 MainWindow::~MainWindow()
@@ -118,5 +129,11 @@ delete qss;
  void MainWindow::btncolortest_clicked(bool)
  {
      centreimgwidget->EnableColorCube();
+     centreimgwidget->update();
+ }
+
+ void MainWindow::aimbientValueChanged(int value)
+ {
+     centreimgwidget->SetAimbientValue(value/10.0f);
      centreimgwidget->update();
  }

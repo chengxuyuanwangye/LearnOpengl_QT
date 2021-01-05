@@ -17,6 +17,7 @@ public:
     void StartAnimate(bool flag);
     void EnableCube();
     void EnableColorCube();
+    void SetAimbientValue(float value);
 
 protected:
     void initializeGL()Q_DECL_OVERRIDE;

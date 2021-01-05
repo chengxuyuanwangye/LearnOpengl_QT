@@ -275,5 +275,19 @@ void MyGLWidget::StartAnimate(bool flag)
          }
      }
  }
+ void MyGLWidget::SetAimbientValue(float value)
+ {
+     QVector<Shape*>::iterator i;
+     for(i=shapevec.begin();i!=shapevec.end();++i)
+     {
+         if((*i)->inherits("ColorCube"))
+         {
+             Shape* temp=*i;
+             ColorCube* tempcube= qobject_cast<ColorCube *>(temp);
+             tempcube->SetAmbientStrength(value);
+
+         }
+     }
+ }
 
 

@@ -7,7 +7,6 @@
 #include"camera.h"
 LightCube::LightCube(int width,int height):
     Shape(width,height),
-    m_frame(0),
     m_modeltransmat(0,0,0),
     m_modelsaclemat(1.0f,1.0f,1.0f)
 {
@@ -96,10 +95,6 @@ LightCube::LightCube(int width,int height):
    m_program->setUniformValue("model", model);
    QMatrix4x4 view;
    view.setToIdentity();
-   float radius = 5.0f;
-   float camX   = sin(100.0f * m_frame /120) * radius;
-   float camZ   = cos(100.0f * m_frame /120) * radius;
-   view.lookAt(QVector3D(camX,0.0f,camZ),QVector3D(0.0f,0.0f,0.0f),QVector3D(0.0f,1.0f,0.0f));
    m_program->setUniformValue("view", view);
    QMatrix4x4 projection;
    projection.perspective(45.0f, 1.0f * width / height, 0.1f, 100.0f);
@@ -148,10 +143,7 @@ void  LightCube::Resize(int width, int height)
 
 }
 
-void LightCube::Animate()
-{
-    m_frame++;
-}
+
 
  void LightCube::SetTranslate(QVector3D trans)
  {

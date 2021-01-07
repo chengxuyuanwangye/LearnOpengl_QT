@@ -19,9 +19,7 @@ Shape::~Shape()
     }
     m_vao->destroy();
     delete m_vbo;
-
     delete m_vao;
-
 }
 
 void Shape::Render()

@@ -28,6 +28,7 @@ private:
     void btncube_clicked(bool);
     void btncolortest_clicked(bool);
     void aimbientValueChanged(int);
+    void specularValueChanged(int);
 };
 
 #endif // MAINWINDOW_H

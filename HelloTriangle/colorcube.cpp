@@ -7,10 +7,10 @@
 #include"camera.h"
 ColorCube::ColorCube(int width,int height):
     Shape(width,height),
-    m_frame(0),
     m_modeltransmat(0,0,0),
     m_lightPosition(0,0,0),
-    ambientStrength(0.1f)
+    ambientStrength(0.1f),
+    Specular(2)
 {
   initializeOpenGLFunctions();
   m_program = new QOpenGLShaderProgram(this);
@@ -102,10 +102,6 @@ ColorCube::ColorCube(int width,int height):
    m_program->setUniformValue("model", model);
    QMatrix4x4 view;
    view.setToIdentity();
-   float radius = 5.0f;
-   float camX   = sin(100.0f * m_frame /120) * radius;
-   float camZ   = cos(100.0f * m_frame /120) * radius;
-   view.lookAt(QVector3D(camX,0.0f,camZ),QVector3D(0.0f,0.0f,0.0f),QVector3D(0.0f,1.0f,0.0f));
    m_program->setUniformValue("view", view);
    QMatrix4x4 projection;
    projection.perspective(45.0f, 1.0f * width / height, 0.1f, 100.0f);
@@ -127,18 +123,20 @@ void ColorCube::Render()
     {
     m_program->bind();
     {
+    m_program->setUniformValue("SpecularPara", Specular);
     m_program->setUniformValue("ambientStrength", ambientStrength);
-    m_program->setUniformValue("lightPos",QVector3D(1.2f,1.0f,2.0f));
+    m_program->setUniformValue("lightPos",QVector3D(1.2f, 1.0f, 2.0f));
     QMatrix4x4 view=ShapeCamera->GetViewMatrix();
     m_program->setUniformValue("view", view);
-
+    //viewPos
+    m_program->setUniformValue("viewPos", ShapeCamera->Position);
+    qDebug()<<"ShapeCamera->Position"<<ShapeCamera->Position;
     QMatrix4x4 projection;
     projection.perspective(ShapeCamera->Zoom, 1.0f * m_width / m_height, 0.1f, 100.0f);
     m_program->setUniformValue("projection", projection);
 
     QOpenGLVertexArrayObject::Binder vaoBind(m_vao);
     glDrawArrays(GL_TRIANGLES, 0, 36);
-
     }
     m_program->release();
     }
@@ -157,12 +155,6 @@ void  ColorCube::Resize(int width, int height)
    }
     m_program->release();
 
-}
-
-void ColorCube::Animate()
-{
-    //change the location of m_lightPosition
-    m_frame++;
 }
 
  void ColorCube::SetTranslate(QVector3D trans)
@@ -196,5 +188,15 @@ void ColorCube::Animate()
       }
       m_program->release();
   }
+
+   void ColorCube::SetSpecularStrength(float value)
+   {
+       Specular=value;
+       m_program->bind();
+       {
+           m_program->setUniformValue("SpecularPara", Specular);
+       }
+       m_program->release();
+   }
 
 

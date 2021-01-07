@@ -13,10 +13,7 @@ public:
    virtual void Resize(int width, int height);
    void SetTranslate(QVector3D trans);
    void SetScale(QVector3D scale);
-public slots:
-   void Animate();
 private:
-   int m_frame;
    QVector3D m_modeltransmat;
    QVector3D m_modelsaclemat;
    void UpDateModel();

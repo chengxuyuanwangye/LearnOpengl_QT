@@ -63,7 +63,7 @@ void MyGLWidget::initializeGL()
    shapevec.append(lightcube);
   // lightcube->SetTranslate(QVector3D(1.2f, 1.0f, 2.0f));
     lightcube->SetTranslate(QVector3D(1.2f, 1.0f, 2.0f));
-   lightcube->SetScale(QVector3D(0.2f,0.2f,0.2f));
+   lightcube->SetScale(QVector3D(0.1f,0.1f,0.1f));
    lightcube->ShapeCamera=m_camera;
 
 
@@ -204,6 +204,16 @@ void MyGLWidget::StartAnimate(bool flag)
          m_camera->ProcessKeyboard(RIGHT,deltaTime);
          break;
      }
+     case Qt::Key_Up:
+     {
+         m_camera->ProcessKeyboard(UP,deltaTime);
+         break;
+     }
+     case Qt::Key_Down:
+     {
+         m_camera->ProcessKeyboard(DOWN,deltaTime);
+         break;
+     }
      default:
      {
          break;
@@ -289,5 +299,20 @@ void MyGLWidget::StartAnimate(bool flag)
          }
      }
  }
+
+    void MyGLWidget::SetSpecularValue(float value)
+    {
+        QVector<Shape*>::iterator i;
+        for(i=shapevec.begin();i!=shapevec.end();++i)
+        {
+            if((*i)->inherits("ColorCube"))
+            {
+                Shape* temp=*i;
+                ColorCube* tempcube= qobject_cast<ColorCube *>(temp);
+                tempcube->SetSpecularStrength(value);
+
+            }
+        }
+    }
 
 

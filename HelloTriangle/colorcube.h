@@ -14,13 +14,13 @@ public:
     void SetTranslate(QVector3D trans);
     void SetLightPosition(QVector3D lightpos);
     void SetAmbientStrength(float strength);
-public slots:
-    void Animate();
+    void SetSpecularStrength(float value);
 private:
-    int m_frame;
+
     QVector3D m_modeltransmat;
     QVector3D m_lightPosition;
     float ambientStrength;
+    float Specular;
 
 
 };

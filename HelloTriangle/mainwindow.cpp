@@ -58,12 +58,31 @@ void MainWindow:: createDockTool()
 
      QPushButton *btncolortest=new QPushButton(contwidget);
      btncolortest->setText("colortest");
+
+     QLabel *aimbienttag=new QLabel(contwidget);
+     aimbienttag->setText("aimbient");
+     aimbienttag->setFixedHeight(10);
+     aimbienttag->adjustSize();
+
      QSlider * aimbientSlider=new QSlider(contwidget);
      aimbientSlider->setOrientation(Qt::Horizontal);
      aimbientSlider->setMinimum(0);
      aimbientSlider->setMaximum(10);
      aimbientSlider->setSingleStep(1);
      aimbientSlider->setValue(1);
+
+     QLabel *speculartag=new QLabel(contwidget);
+     speculartag->setText("specular");
+     speculartag->setFixedHeight(10);
+     speculartag->adjustSize();
+
+     QSlider * specularSlider=new QSlider(contwidget);
+     specularSlider->setOrientation(Qt::Horizontal);
+     specularSlider->setMinimum(1);
+     specularSlider->setMaximum(8);
+     specularSlider->setSingleStep(1);
+     specularSlider->setValue(1);
+
 
 
 
@@ -73,7 +92,10 @@ void MainWindow:: createDockTool()
      btnlayout->addWidget(btnrectangle,2,0);
      btnlayout->addWidget(btncube,3,0);
      btnlayout->addWidget(btncolortest,4,0);
-     btnlayout->addWidget(aimbientSlider,5,0);
+     btnlayout->addWidget(aimbienttag,5,0);
+     btnlayout->addWidget(aimbientSlider,6,0);
+     btnlayout->addWidget(speculartag,7,0);
+     btnlayout->addWidget(specularSlider,8,0);
 
 
 
@@ -87,6 +109,7 @@ void MainWindow:: createDockTool()
      connect(btncube,&QPushButton::clicked,this,&MainWindow::btncube_clicked);
      connect(btncolortest,&QPushButton::clicked,this,&MainWindow::btncolortest_clicked);
      connect(aimbientSlider,&QSlider::valueChanged,this,&MainWindow::aimbientValueChanged);
+     connect(specularSlider,&QSlider::valueChanged,this,&MainWindow::specularValueChanged);
 }
 
 MainWindow::~MainWindow()
@@ -137,3 +160,8 @@ delete qss;
      centreimgwidget->SetAimbientValue(value/10.0f);
      centreimgwidget->update();
  }
+  void MainWindow::specularValueChanged(int value)
+  {
+      centreimgwidget->SetSpecularValue( pow(2,value));
+      centreimgwidget->update();
+  }

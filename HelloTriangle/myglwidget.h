@@ -18,6 +18,7 @@ public:
     void EnableCube();
     void EnableColorCube();
     void SetAimbientValue(float value);
+    void SetSpecularValue(float value);
 
 protected:
     void initializeGL()Q_DECL_OVERRIDE;

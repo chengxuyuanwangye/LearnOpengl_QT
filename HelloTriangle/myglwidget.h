@@ -45,5 +45,9 @@ private:
     // timing
     float deltaTime ;	// time between current frame and last frame
     float lastFrame ;
+
+    int m_frame;
+
+
 };
 #endif // MYGLWIDGET_H

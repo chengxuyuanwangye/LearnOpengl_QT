@@ -51,7 +51,7 @@ void MainWindow:: createDockTool()
      QPushButton *btnrectangle=new QPushButton(contwidget);
      btnrectangle->setText("Rectangle");
      QPushButton *btnanimate=new QPushButton(contwidget);
-     btnanimate->setText("startRotate");
+     btnanimate->setText("Animate");
 
      QPushButton *btncube=new QPushButton(contwidget);
      btncube->setText("Cube");

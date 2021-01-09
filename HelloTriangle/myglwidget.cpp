@@ -19,7 +19,8 @@ MyGLWidget::MyGLWidget(QWidget *parent):
     firstMouse(true),
     leftbuttonpressed(false),
     deltaTime(0.0f),
-    lastFrame(0.0f)
+    lastFrame(0.0f),
+    m_frame(0)
 {
     m_timer=new QTimer(this);
     m_timer->setInterval(60);
@@ -174,6 +175,18 @@ void MyGLWidget::StartAnimate(bool flag)
              Shape* temp=*i;
              Cube* tempcube= qobject_cast<Cube *>(temp);
              tempcube->Animate();
+         }
+         else if((*i)->inherits("ColorCube"))
+         {
+           m_frame++;
+           QVector3D lightcolor;
+            lightcolor.setX(sin(m_frame*2.0f));
+            lightcolor.setY(sin(m_frame*0.7f));
+            lightcolor.setZ(sin(m_frame*1.3f));
+            Shape* temp=*i;
+            ColorCube* tempcube= qobject_cast<ColorCube *>(temp);
+            tempcube->SetLightColor(lightcolor);
+
          }
      }
 

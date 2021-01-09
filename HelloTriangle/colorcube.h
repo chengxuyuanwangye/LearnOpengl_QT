@@ -15,12 +15,18 @@ public:
     void SetLightPosition(QVector3D lightpos);
     void SetAmbientStrength(float strength);
     void SetSpecularStrength(float value);
+    void SetLightColor(QVector3D lightColor);
 private:
 
     QVector3D m_modeltransmat;
     QVector3D m_lightPosition;
     float ambientStrength;
     float Specular;
+    QVector3D m_curColor;
+    QVector3D m_lightColor;
+
+
+
 
 
 };

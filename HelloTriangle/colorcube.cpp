@@ -10,7 +10,9 @@ ColorCube::ColorCube(int width,int height):
     m_modeltransmat(0,0,0),
     m_lightPosition(0,0,0),
     ambientStrength(0.1f),
-    Specular(2)
+    Specular(2),
+    m_curColor(1.0f, 0.5f, 0.31f),
+    m_lightColor(1.0f,1.0f,1.0f)
 {
   initializeOpenGLFunctions();
   m_program = new QOpenGLShaderProgram(this);
@@ -106,10 +108,6 @@ ColorCube::ColorCube(int width,int height):
    QMatrix4x4 projection;
    projection.perspective(45.0f, 1.0f * width / height, 0.1f, 100.0f);
    m_program->setUniformValue("projection", projection);
-
-   m_program->setUniformValue("objectColor", QVector3D(1.0f, 0.5f, 0.31f));
-   m_program->setUniformValue("lightColor", QVector3D(1.0f, 1.0f, 1.0f));
-   m_program->setUniformValue("ambientStrength", ambientStrength);
    m_program->release();
 }
 
@@ -123,14 +121,27 @@ void ColorCube::Render()
     {
     m_program->bind();
     {
-    m_program->setUniformValue("SpecularPara", Specular);
-    m_program->setUniformValue("ambientStrength", ambientStrength);
-    m_program->setUniformValue("lightPos",QVector3D(1.2f, 1.0f, 2.0f));
+         m_program->setUniformValue("light.position",QVector3D(1.2f, 1.0f, 2.0f));
+         m_program->setUniformValue("light.ambient", m_lightColor);
+         m_program->setUniformValue("light.diffuse", m_lightColor*0.25f);
+         m_program->setUniformValue("light.specular", QVector3D(1.0f,1.0f,1.0f));
+
+
+         m_program->setUniformValue("material.ambient", m_curColor*ambientStrength);
+         m_program->setUniformValue("material.diffuse", m_curColor);
+         m_program->setUniformValue("material.specular", QVector3D(0.5f,0.5f,0.5f));
+         m_program->setUniformValue("material.shininess",Specular);
+
+
+  //  m_program->setUniformValue("SpecularPara", Specular);
+   // m_program->setUniformValue("ambientStrength", ambientStrength);
+
+   // m_program->setUniformValue("lightPos",QVector3D(1.2f, 1.0f, 2.0f));
     QMatrix4x4 view=ShapeCamera->GetViewMatrix();
     m_program->setUniformValue("view", view);
     //viewPos
     m_program->setUniformValue("viewPos", ShapeCamera->Position);
-    qDebug()<<"ShapeCamera->Position"<<ShapeCamera->Position;
+
     QMatrix4x4 projection;
     projection.perspective(ShapeCamera->Zoom, 1.0f * m_width / m_height, 0.1f, 100.0f);
     m_program->setUniformValue("projection", projection);
@@ -197,6 +208,11 @@ void  ColorCube::Resize(int width, int height)
            m_program->setUniformValue("SpecularPara", Specular);
        }
        m_program->release();
+   }
+
+   void ColorCube::SetLightColor(QVector3D lightColor)
+   {
+       m_lightColor=lightColor;
    }
 
 

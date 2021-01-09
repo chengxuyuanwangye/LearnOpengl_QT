@@ -3,6 +3,7 @@
 
 #include"shape.h"
 #include<QVector3D>
+class QOpenGLTexture;
 class ColorCube:public Shape
 {
      Q_OBJECT
@@ -24,6 +25,9 @@ private:
     float Specular;
     QVector3D m_curColor;
     QVector3D m_lightColor;
+    QOpenGLTexture * ourtexture;
+    QOpenGLTexture * speculartexture;
+
 
 
 

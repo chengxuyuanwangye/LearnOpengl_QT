@@ -137,11 +137,6 @@ void Cube::Render()
     glActiveTexture(GL_TEXTURE0);
     ourtexture->bind();
     QMatrix4x4 view=ShapeCamera->GetViewMatrix();
-   // view.setToIdentity();
-   // float radius = 5.0f;
-   // float camX   = sin(100.0f * m_frame /30) * radius;
-    //float camZ   = cos(100.0f * m_frame /30) * radius;
-  //  view.lookAt(QVector3D(camX,0.0f,camZ),QVector3D(0.0f,0.0f,0.0f),QVector3D(0.0f,1.0f,0.0f));
     m_program->setUniformValue("view", view);
 
     QMatrix4x4 projection;

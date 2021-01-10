@@ -152,37 +152,38 @@ void ColorCube::Render()
 {
     if(m_visible)
     {
-    m_program->bind();
-    {
-         m_program->setUniformValue("light.position",QVector3D(1.2f, 1.0f, 2.0f));
-         m_program->setUniformValue("light.ambient", m_lightColor);
-         m_program->setUniformValue("light.diffuse", m_lightColor*0.25f);
-         m_program->setUniformValue("light.specular", QVector3D(1.0f,1.0f,1.0f));
+        m_program->bind();
+        {
+            //m_program->setUniformValue("light.position",QVector3D(1.2f, 1.0f, 2.0f));
+            m_program->setUniformValue("light.direction",QVector3D(-2.0f, -1.0f, -0.3f));
+            m_program->setUniformValue("light.ambient", m_lightColor);
+            m_program->setUniformValue("light.diffuse", m_lightColor*0.25f);
+            m_program->setUniformValue("light.specular", QVector3D(1.0f,1.0f,1.0f));
 
-         m_program->setUniformValue("material.diffuse", 0);
-         m_program->setUniformValue("material.specular", QVector3D(0.5f,0.5f,0.5f));
-         m_program->setUniformValue("material.shininess",Specular);
+            m_program->setUniformValue("material.diffuse", 0);
+            m_program->setUniformValue("material.specular", QVector3D(0.5f,0.5f,0.5f));
+            m_program->setUniformValue("material.shininess",Specular);
 
-         glActiveTexture(GL_TEXTURE0);
-         ourtexture->bind();
-         glActiveTexture(GL_TEXTURE1);
-         speculartexture->bind();
+            glActiveTexture(GL_TEXTURE0);
+            ourtexture->bind();
+            glActiveTexture(GL_TEXTURE1);
+            speculartexture->bind();
 
-         QMatrix4x4 view=ShapeCamera->GetViewMatrix();
-         m_program->setUniformValue("view", view);
-         //viewPos
-         m_program->setUniformValue("viewPos", ShapeCamera->Position);
+            QMatrix4x4 view=ShapeCamera->GetViewMatrix();
+            m_program->setUniformValue("view", view);
+            //viewPos
+            m_program->setUniformValue("viewPos", ShapeCamera->Position);
 
-         QMatrix4x4 projection;
-         projection.perspective(ShapeCamera->Zoom, 1.0f * m_width / m_height, 0.1f, 100.0f);
-         m_program->setUniformValue("projection", projection);
+            QMatrix4x4 projection;
+            projection.perspective(ShapeCamera->Zoom, 1.0f * m_width / m_height, 0.1f, 100.0f);
+            m_program->setUniformValue("projection", projection);
 
-         QOpenGLVertexArrayObject::Binder vaoBind(m_vao);
-         glDrawArrays(GL_TRIANGLES, 0, 36);
-         ourtexture->release();
-         speculartexture->release();
-    }
-    m_program->release();
+            QOpenGLVertexArrayObject::Binder vaoBind(m_vao);
+            glDrawArrays(GL_TRIANGLES, 0, 36);
+            ourtexture->release();
+            speculartexture->release();
+        }
+        m_program->release();
     }
 
 }

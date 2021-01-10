@@ -56,10 +56,32 @@ void MyGLWidget::initializeGL()
    Cube* cub=new Cube(width(),height());
    shapevec.append(cub);
    cub->ShapeCamera=m_camera;
-   ColorCube* colcube=new ColorCube(width(),height());
-   shapevec.append(colcube);
-  // colcube->SetTranslate(QVector3D(1.2f, 1.0f, 2.0f));
-   colcube->ShapeCamera=m_camera;
+
+   QVector3D cubePositions[] = {
+          QVector3D( 0.0f,  0.0f,  0.0f),
+          QVector3D( 2.0f,  5.0f, -15.0f),
+          QVector3D(-1.5f, -2.2f, -2.5f),
+          QVector3D(-3.8f, -2.0f, -12.3f),
+          QVector3D( 2.4f, -0.4f, -3.5f),
+          QVector3D(-1.7f,  3.0f, -7.5f),
+          QVector3D( 1.3f, -2.0f, -2.5f),
+          QVector3D( 1.5f,  2.0f, -2.5f),
+          QVector3D( 1.5f,  0.2f, -1.5f),
+          QVector3D(-1.3f,  1.0f, -1.5f)
+      };
+   for (unsigned int i = 0; i < 10; i++)
+   {
+       ColorCube* colcube=new ColorCube(width(),height());
+       shapevec.append(colcube);
+       QMatrix4x4 mat;
+       mat.setToIdentity();
+       mat.translate(cubePositions[i]);
+       float angle = 20.0f * i;
+       mat.rotate(angle,QVector3D(1.0f, 0.3f, 0.5f));
+       colcube->SetModelMatrix(mat);
+       colcube->ShapeCamera=m_camera;
+   }
+
    LightCube *lightcube=new LightCube(width(),height());
    shapevec.append(lightcube);
   // lightcube->SetTranslate(QVector3D(1.2f, 1.0f, 2.0f));

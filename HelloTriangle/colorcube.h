@@ -17,8 +17,8 @@ public:
     void SetAmbientStrength(float strength);
     void SetSpecularStrength(float value);
     void SetLightColor(QVector3D lightColor);
+    void SetModelMatrix(QMatrix4x4 mat);
 private:
-
     QVector3D m_modeltransmat;
     QVector3D m_lightPosition;
     float ambientStrength;
@@ -27,12 +27,6 @@ private:
     QVector3D m_lightColor;
     QOpenGLTexture * ourtexture;
     QOpenGLTexture * speculartexture;
-
-
-
-
-
-
 };
 
 #endif // CUBE_H

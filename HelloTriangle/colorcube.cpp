@@ -215,8 +215,6 @@ void  ColorCube::Resize(int width, int height)
          m_program->setUniformValue("model", model);
      }
      m_program->release();
-
-
  }
 
   void ColorCube::SetLightPosition(QVector3D lightpos)
@@ -249,4 +247,15 @@ void  ColorCube::Resize(int width, int height)
        m_lightColor=lightColor;
    }
 
+   ///
+   /// \brief ColorCube::SetModelMatrix
+   /// \param mat
+   void ColorCube::SetModelMatrix(QMatrix4x4 mat)
+   {
+       m_program->bind();
+       {
+           m_program->setUniformValue("model", mat);
+       }
+       m_program->release();
+   }
 

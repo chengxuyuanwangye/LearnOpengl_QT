@@ -27,6 +27,7 @@ private:
     QVector3D m_lightColor;
     QOpenGLTexture * ourtexture;
     QOpenGLTexture * speculartexture;
+    QVector3D pointLightPositions[4];
 };
 
 #endif // CUBE_H

@@ -154,10 +154,14 @@ void ColorCube::Render()
     {
         m_program->bind();
         {
-            m_program->setUniformValue("light.position",QVector3D(1.2f, 1.0f, 2.0f));
-           // m_program->setUniformValue("light.direction",QVector3D(-2.0f, -1.0f, -0.3f));
+            m_program->setUniformValue("light.position",ShapeCamera->Position);
+            m_program->setUniformValue("light.direction",ShapeCamera->Front);
+            m_program->setUniformValue("light.cutOff",static_cast<float>(cos(12.5f*3.1415/180)));
+            m_program->setUniformValue("light.outerCutOff",static_cast<float>(cos(17.5f*3.1415/180)));
+
+
             m_program->setUniformValue("light.ambient", m_lightColor);
-            m_program->setUniformValue("light.diffuse", m_lightColor*0.25f);
+            m_program->setUniformValue("light.diffuse", m_lightColor*8);
             m_program->setUniformValue("light.specular", QVector3D(1.0f,1.0f,1.0f));
 
             m_program->setUniformValue("light.constant", 1.0f);

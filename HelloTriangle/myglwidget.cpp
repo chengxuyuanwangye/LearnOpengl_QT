@@ -24,7 +24,7 @@ MyGLWidget::MyGLWidget(QWidget *parent):
 {
     m_timer=new QTimer(this);
     m_timer->setInterval(60);
-    m_camera=new Camera(QVector3D(0.0f,0.0f,3.0f));
+    m_camera=new Camera(QVector3D(0.0f,0.0f,3.0f));//3.0
     lastX = width() / 2.0f;
     lastY = height() / 2.0f;
     //test
@@ -79,6 +79,7 @@ void MyGLWidget::initializeGL()
        float angle = 20.0f * i;
        mat.rotate(angle,QVector3D(1.0f, 0.3f, 0.5f));
        colcube->SetModelMatrix(mat);
+       colcube->SetLightColor(QVector3D(0.1f,0.1f,0.1f));
        colcube->ShapeCamera=m_camera;
    }
 

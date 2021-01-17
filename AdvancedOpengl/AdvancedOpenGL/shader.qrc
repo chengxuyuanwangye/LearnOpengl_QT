@@ -1,0 +1,13 @@
+<RCC>
+    <qresource prefix="/img">
+        <file>awesomeface.png</file>
+        <file>container.jpg</file>
+        <file>container2.png</file>
+        <file>container2_specular.png</file>
+        <file>wall.jpg</file>
+    </qresource>
+    <qresource prefix="/shader">
+        <file>cube.frag</file>
+        <file>cube.vert</file>
+    </qresource>
+</RCC>

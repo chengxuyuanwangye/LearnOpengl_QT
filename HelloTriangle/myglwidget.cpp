@@ -13,6 +13,7 @@
 #include"camera.h"
 #include<QKeyEvent>
 #include<QMouseEvent>
+#include<QPainter>
 MyGLWidget::MyGLWidget(QWidget *parent):
     QOpenGLWidget (parent),
     animateflag(false),
@@ -37,10 +38,10 @@ MyGLWidget::MyGLWidget(QWidget *parent):
 
 MyGLWidget::~MyGLWidget()
 {
-
+    makeCurrent();
     qDeleteAll(shapevec);
     delete m_camera;
-
+    doneCurrent();
 }
 
 void MyGLWidget::initializeGL()
@@ -97,14 +98,21 @@ void MyGLWidget::initializeGL()
 
 void MyGLWidget::paintGL()
 {
+  //  QPainter painter(this);
+   // painter.beginNativePainting();
     /*清空颜色缓存，深度缓存，模板缓存*/
      glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
     // shapetest->Render();
+      glEnable(GL_DEPTH_TEST);
      QVector<Shape*>::iterator i;
      for(i=shapevec.begin();i!=shapevec.end();++i)
      {
          (*i)->Render();
      }
+     glDisable(GL_DEPTH_TEST);
+    // painter.endNativePainting();
+    // painter.setPen(Qt::green);
+   //  painter.drawLine(0,0,100,100);
     // shapevec[1]->Render();
 }
 

@@ -1,4 +1,4 @@
-分#ifndef MYGLWIDGET_H
+#ifndef MYGLWIDGET_H
 #define MYGLWIDGET_H
 
 #include<QOpenGLWidget>
@@ -6,20 +6,18 @@
 class Shape;
 class QTimer;
 class Camera;
+
+enum DEPTHFUNC {ALWAYS, NEVER, LESS, EQUAL,LEQUAL,GREATER,NOTEQUAL,GEQUAL};
+
 class MyGLWidget:public QOpenGLWidget,protected QOpenGLFunctions
 {
      Q_OBJECT
 public:
    explicit MyGLWidget(QWidget *parent=nullptr);
     ~MyGLWidget() Q_DECL_OVERRIDE;
-    void EnableTriangle();
-    void EnableRectangle();
     void StartAnimate(bool flag);
     void EnableCube();
-    void EnableColorCube();
-    void SetAimbientValue(float value);
-    void SetSpecularValue(float value);
-
+    void SetDepthFunc(DEPTHFUNC depthfunc);
 protected:
     void initializeGL()Q_DECL_OVERRIDE;
     void paintGL() Q_DECL_OVERRIDE;
@@ -47,6 +45,7 @@ private:
     float lastFrame ;
 
     int m_frame;
+    DEPTHFUNC curdepthfunc;
 
 
 };

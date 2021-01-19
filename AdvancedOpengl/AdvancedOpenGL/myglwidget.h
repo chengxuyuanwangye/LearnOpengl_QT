@@ -6,6 +6,7 @@
 class Shape;
 class QTimer;
 class Camera;
+class Plane;
 
 enum DEPTHFUNC {ALWAYS, NEVER, LESS, EQUAL,LEQUAL,GREATER,NOTEQUAL,GEQUAL};
 
@@ -29,7 +30,10 @@ protected:
     void mouseMoveEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
     void wheelEvent(QWheelEvent *event) Q_DECL_OVERRIDE;
 private:
-    QVector<Shape*> shapevec;
+    QVector<Shape*> cubevec;
+    QVector<Shape*> framevec;
+    Plane* plane;
+
     QTimer* m_timer;
     bool animateflag;
     void timeoutFunc();

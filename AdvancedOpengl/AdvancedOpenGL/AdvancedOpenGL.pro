@@ -7,7 +7,8 @@ SOURCES += \
     mainwindow.cpp \
     myglwidget.cpp \
     shape.cpp \
-    plane.cpp
+    plane.cpp \
+    cubeframe.cpp
 
 HEADERS += \
     camera.h \
@@ -15,7 +16,8 @@ HEADERS += \
     mainwindow.h \
     myglwidget.h \
     shape.h \
-    plane.h
+    plane.h \
+    cubeframe.h
 
 RESOURCES += \
     shader.qrc

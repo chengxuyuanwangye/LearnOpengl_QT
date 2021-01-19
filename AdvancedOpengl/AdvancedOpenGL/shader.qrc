@@ -9,5 +9,7 @@
     <qresource prefix="/shader">
         <file>cube.frag</file>
         <file>cube.vert</file>
+        <file>cubeframe.frag</file>
+        <file>cubeframe.vert</file>
     </qresource>
 </RCC>

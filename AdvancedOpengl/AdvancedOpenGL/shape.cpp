@@ -1,5 +1,6 @@
 #include "shape.h"
-
+#include<QDebug>
+#include<QOpenGLShaderProgram>
 Shape::Shape(int width,int height)
 : QObject(nullptr),
   m_visible(false),
@@ -12,14 +13,25 @@ Shape::Shape(int width,int height)
 
 Shape::~Shape()
 {
-    m_vbo->destroy();
+
+    if(m_vbo!=nullptr)
+    {
+        m_vbo->destroy();
+        delete m_vbo;
+    }
     if(m_ebo!=nullptr){
         m_ebo->destroy();
         delete m_ebo;
     }
-    m_vao->destroy();
-    delete m_vbo;
-    delete m_vao;
+    if(m_vao!=nullptr)
+    {
+        m_vao->destroy();
+        delete m_vao;
+    }
+    if(m_program!=nullptr)
+        delete m_program;
+
+
 }
 
 void Shape::Render()

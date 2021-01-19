@@ -17,7 +17,6 @@ private:
     QDockWidget *toolpanel;
     MyGLWidget *centreimgwidget;
     QWidget *centralWidget;
-    QFile *qss;
     QWidget *dockWidgetContents;
     QWidget *contwidget;
     void createDockTool();

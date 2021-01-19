@@ -66,7 +66,6 @@ void MainWindow:: createDockTool()
      btngreater->setText("Greater");
 
 
-
      btnlayout->addWidget(btncube,0,0);
      btnlayout->addWidget(btnalways,1,0);
      btnlayout->addWidget(btnnever,2,0);
@@ -88,8 +87,6 @@ void MainWindow:: createDockTool()
 
 MainWindow::~MainWindow()
 {
-delete qss;
-
 
 }
  void MainWindow::resizeEvent(QResizeEvent* event)

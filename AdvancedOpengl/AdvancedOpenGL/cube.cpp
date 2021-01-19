@@ -10,6 +10,11 @@ Cube::Cube(int width,int height):
     Shape(width,height),
     m_frame(0)
 {
+   ourtexture=nullptr;
+   m_vbo=nullptr;//顶点缓冲对象
+   m_ebo=nullptr;//索引缓冲对象
+   m_vao=nullptr;//顶点数组对象
+   m_program=nullptr;
   initializeOpenGLFunctions();
   m_program = new QOpenGLShaderProgram(this);
   bool success = m_program->addShaderFromSourceFile(QOpenGLShader::Vertex, ":/shader/cube.vert");
@@ -128,7 +133,9 @@ Cube::Cube(int width,int height):
 
 Cube::~Cube()
 {
+
   delete  ourtexture;
+
 }
 void Cube::Render()
 {

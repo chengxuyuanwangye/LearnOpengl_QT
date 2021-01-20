@@ -4,6 +4,7 @@
 #include<QOpenGLShaderProgram>
 #include<QObject>
 #include<QDebug>
+#include <iostream>
 #include"shape.h"
 #include"cube.h"
 #include"camera.h"
@@ -79,15 +80,15 @@ void MyGLWidget::initializeGL()
     frame2->SetScale(1.1f);*/
 
 
-    QVector<QVector3D> vegetation
-    {
-        QVector3D(-1.5f, 0.0f, -0.48f), QVector3D( 1.5f, 0.0f, 0.51f),
-        QVector3D( 0.0f, 0.0f, 0.7f),QVector3D(-0.3f, 0.0f, -2.3f),
-        QVector3D (0.5f, 0.0f, -0.6f)
-    };
+    windows.push_front(QVector3D(-1.5f, 0.0f, -0.48f));
+    windows.push_front( QVector3D( 1.5f, 0.0f, 0.51f));
+    windows.push_front(QVector3D( 0.0f, 0.0f, 0.7f));
+    windows.push_front(QVector3D(-0.3f, 0.0f, -2.3f));
+    windows.push_front(QVector3D (0.5f, 0.0f, -0.6f));
+
      QVector<QVector3D>::iterator i;
 
-     for(i=vegetation.begin();i!=vegetation.end();++i)
+     for(i=windows.begin();i!=windows.end();++i)
      {
          Vegetation * temp=new Vegetation(width(),height()) ;
          grassvec.append(temp);
@@ -101,6 +102,7 @@ void MyGLWidget::initializeGL()
     plane->ChangeVisible(true);
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
   //  glEnable(GL_STENCIL_TEST);
   //  glStencilFunc(GL_NOTEQUAL, 1, 0xFF);
   //  glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
@@ -173,11 +175,28 @@ void MyGLWidget::paintGL()
         (*i)->Render();
     }
 
-    for(i=grassvec.begin();i!=grassvec.end();++i)
+    //排序
+    std::map<float,QVector3D> sorted;
+    for(int j=0;j<windows.size();j++)
+    {
+        QVector3D disvec=m_camera->Position-windows[j];
+        float distance=disvec.lengthSquared();
+        sorted[distance] = windows[j];
+
+    }
+    int count=0;
+    for(std::map<float,QVector3D>::reverse_iterator  it=sorted.rbegin();it!=sorted.rend();++it)
+    {
+        grassvec[count]->SetTranslateVec(it->second);
+        grassvec[count]->Render();
+        count++;
+    }
+   /*   for(i=grassvec.begin();i!=grassvec.end();++i)
     {
          (*i)->Render();
 
-    }
+    }*/
+
 
    /* glStencilFunc(GL_NOTEQUAL, 1, 0xFF);  //3.1 模板测试的通过条件是不等于1
     glStencilMask(0x00);//3.2禁止此后的操作写入模板缓冲

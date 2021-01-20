@@ -33,6 +33,7 @@ private:
     QVector<Shape*> cubevec;
     QVector<Shape*> framevec;
     QVector<Shape*> grassvec;
+    QVector<QVector3D> windows;
     Plane* plane;
 
     QTimer* m_timer;

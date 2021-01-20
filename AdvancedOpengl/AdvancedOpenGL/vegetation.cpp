@@ -66,7 +66,7 @@ Vegetation::Vegetation(int width, int height):
      m_program->enableAttributeArray(texattr);
      m_vbo->release();
      m_vao->release();
-     ourtexture=new QOpenGLTexture(QImage(":/img/grass.png"), QOpenGLTexture::GenerateMipMaps);
+     ourtexture=new QOpenGLTexture(QImage(":/img/blending_transparent_window.png"), QOpenGLTexture::GenerateMipMaps);
      if(!ourtexture->isCreated())
      {
          qDebug()<<"failed to load texture";

@@ -32,6 +32,7 @@ protected:
 private:
     QVector<Shape*> cubevec;
     QVector<Shape*> framevec;
+    QVector<Shape*> grassvec;
     Plane* plane;
 
     QTimer* m_timer;

@@ -13,6 +13,7 @@
 #include<math.h>
 #include"plane.h"
 #include"cubeframe.h"
+#include"vegetation.h"
 MyGLWidget::MyGLWidget(QWidget *parent):
     QOpenGLWidget (parent),
     animateflag(false),
@@ -42,6 +43,7 @@ MyGLWidget::~MyGLWidget()
     makeCurrent();
     qDeleteAll(framevec);
     qDeleteAll(cubevec);
+    qDeleteAll(grassvec);
     if(plane!=nullptr)
     delete plane;
     delete m_camera;
@@ -59,33 +61,49 @@ void MyGLWidget::initializeGL()
     cub->ShapeCamera=m_camera;
     cub->SetTranslateVec(QVector3D(-1.0f, 0.0f, -1.0f));
 
-    CubeFrame* frame1=new CubeFrame(width(),height());
+   /* CubeFrame* frame1=new CubeFrame(width(),height());
     framevec.append(frame1);
     frame1->ShapeCamera=m_camera;
     frame1->SetTranslateVec(QVector3D(-1.0f, 0.0f, -1.0f));
-    frame1->SetScale(1.1f);
+    frame1->SetScale(1.1f);*/
 
     Cube* cub2=new Cube(width(),height());
     cubevec.append(cub2);
     cub2->ShapeCamera=m_camera;
     cub2->SetTranslateVec(QVector3D(2.0f, 0.0f, 0.0f));
 
-    CubeFrame* frame2=new CubeFrame(width(),height());
+  /*  CubeFrame* frame2=new CubeFrame(width(),height());
     framevec.append(frame2);
     frame2->ShapeCamera=m_camera;
     frame2->SetTranslateVec(QVector3D(2.0f, 0.0f, 0.0f));
-    frame2->SetScale(1.1f);
+    frame2->SetScale(1.1f);*/
+
+
+    QVector<QVector3D> vegetation
+    {
+        QVector3D(-1.5f, 0.0f, -0.48f), QVector3D( 1.5f, 0.0f, 0.51f),
+        QVector3D( 0.0f, 0.0f, 0.7f),QVector3D(-0.3f, 0.0f, -2.3f),
+        QVector3D (0.5f, 0.0f, -0.6f)
+    };
+     QVector<QVector3D>::iterator i;
+
+     for(i=vegetation.begin();i!=vegetation.end();++i)
+     {
+         Vegetation * temp=new Vegetation(width(),height()) ;
+         grassvec.append(temp);
+         temp->ShapeCamera=m_camera;
+         temp->SetTranslateVec(*i);
+     }
+
 
     plane=new Plane(width(),height());
-    // cubevec.append(plane);
     plane->ShapeCamera=m_camera;
     plane->ChangeVisible(true);
-    // plane->SetTranslateVec(QVector3D(0.0f, 0.0f, 0.0f));
-    //glEnable(GL_DEPTH_TEST);
     glEnable(GL_DEPTH_TEST);
-    glEnable(GL_STENCIL_TEST);
-    glStencilFunc(GL_NOTEQUAL, 1, 0xFF);
-    glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
+    glEnable(GL_BLEND);
+  //  glEnable(GL_STENCIL_TEST);
+  //  glStencilFunc(GL_NOTEQUAL, 1, 0xFF);
+  //  glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
     //*模板测试和深度测试都通过时将模板纸设置为glStencilFunc函数设置的ref值
 }
 
@@ -95,7 +113,7 @@ void MyGLWidget::paintGL()
     /*清空颜色缓存，深度缓存，模板缓存*/
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
     //此时所有片段的模板缓冲内都是0
-    glEnable(GL_STENCIL_BUFFER_BIT);
+   // glEnable(GL_STENCIL_BUFFER_BIT);
 
     switch (curdepthfunc) {
     case DEPTHFUNC::LESS:
@@ -142,11 +160,11 @@ void MyGLWidget::paintGL()
     }
 
     }
-    glStencilMask(0x00);//1.1禁止写入模板缓冲
+  //  glStencilMask(0x00);//1.1禁止写入模板缓冲
     plane->Render();//1.2绘制地板平面，此时不会影响模板缓冲，测试总是通过
 
-    glStencilFunc(GL_ALWAYS, 1, 0xFF);//2.1设置模板测试函数，当前总是通过测试，并将对应片段的模板缓冲设置为1
-    glStencilMask(0xFF);//2.2 开启模板缓冲
+   // glStencilFunc(GL_ALWAYS, 1, 0xFF);//2.1设置模板测试函数，当前总是通过测试，并将对应片段的模板缓冲设置为1
+  //  glStencilMask(0xFF);//2.2 开启模板缓冲
 
     QVector<Shape*>::iterator i;
     for(i=cubevec.begin();i!=cubevec.end();++i)
@@ -155,17 +173,22 @@ void MyGLWidget::paintGL()
         (*i)->Render();
     }
 
-    glStencilFunc(GL_NOTEQUAL, 1, 0xFF);  //3.1 模板测试的通过条件是不等于1
+    for(i=grassvec.begin();i!=grassvec.end();++i)
+    {
+         (*i)->Render();
+
+    }
+
+   /* glStencilFunc(GL_NOTEQUAL, 1, 0xFF);  //3.1 模板测试的通过条件是不等于1
     glStencilMask(0x00);//3.2禁止此后的操作写入模板缓冲
     glDisable(GL_DEPTH_TEST);
     for(i=framevec.begin();i!=framevec.end();++i)
     {
         //3.3绘制单色边框，此时片段中模板缓冲为1（也就是2.2中绘制箱子部分对应的片段）无法通过模板测试，因此将不会绘制
         (*i)->Render();
-    }
-
-    glStencilMask(0xFF);
-    glStencilFunc(GL_ALWAYS, 0, 0xFF);
+    }*/
+   // glStencilMask(0xFF);
+   // glStencilFunc(GL_ALWAYS, 0, 0xFF);
     glEnable(GL_DEPTH_TEST);
 }
 
@@ -180,7 +203,10 @@ void MyGLWidget::EnableCube()
     {
          (*i)->ChangeVisible(true);
     }
-
+    for(i=grassvec.begin();i!=grassvec.end();++i)
+    {
+         (*i)->ChangeVisible(true);
+    }
 }
 
 
@@ -197,6 +223,10 @@ for(i=cubevec.begin();i!=cubevec.end();++i)
 for(i=framevec.begin();i!=framevec.end();++i)
 {
      (*i)->Resize(width,height);
+}
+for(i=grassvec.begin();i!=grassvec.end();++i)
+{
+   (*i)->Resize(width,height);
 }
 
 plane->Resize(width,height);

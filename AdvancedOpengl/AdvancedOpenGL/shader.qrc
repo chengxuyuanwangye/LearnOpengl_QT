@@ -5,11 +5,15 @@
         <file>container2.png</file>
         <file>container2_specular.png</file>
         <file>wall.jpg</file>
+        <file>blending_transparent_window.png</file>
+        <file>grass.png</file>
     </qresource>
     <qresource prefix="/shader">
         <file>cube.frag</file>
         <file>cube.vert</file>
         <file>cubeframe.frag</file>
         <file>cubeframe.vert</file>
+        <file>vegetation.frag</file>
+        <file>vegetation.vert</file>
     </qresource>
 </RCC>

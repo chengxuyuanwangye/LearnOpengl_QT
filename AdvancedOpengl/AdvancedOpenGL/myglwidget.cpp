@@ -2,6 +2,10 @@
 #include<QTimer>
 #include<QMatrix4x4>
 #include<QOpenGLShaderProgram>
+#include<QOpenGLFunctions_3_3_Core>
+#include <QOpenGLExtraFunctions>
+#include<QOpenGLTexture>
+#include <QOpenGLFramebufferObject>
 #include<QObject>
 #include<QDebug>
 #include <iostream>
@@ -34,6 +38,11 @@ MyGLWidget::MyGLWidget(QWidget *parent):
     //test
     deltaTime=1.0f;
     setFocusPolicy(Qt::StrongFocus);
+
+    m_vbo=nullptr;//顶点缓冲对象
+    m_vao=nullptr;//顶点数组对象
+    m_program=nullptr;
+    fbo=nullptr;
     connect(m_timer,&QTimer::timeout,this,&MyGLWidget::timeoutFunc);
 
 }
@@ -48,7 +57,10 @@ MyGLWidget::~MyGLWidget()
     if(plane!=nullptr)
     delete plane;
     delete m_camera;
-
+  //  delete screenTexture;
+    if(m_vbo!=nullptr)delete m_vbo;
+    if(m_vao!=nullptr)delete m_vao;
+    delete m_program;
     doneCurrent();
 }
 
@@ -107,16 +119,66 @@ void MyGLWidget::initializeGL()
   //  glStencilFunc(GL_NOTEQUAL, 1, 0xFF);
   //  glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
     //*模板测试和深度测试都通过时将模板纸设置为glStencilFunc函数设置的ref值
+
+    m_program = new QOpenGLShaderProgram(this);
+    bool success = m_program->addShaderFromSourceFile(QOpenGLShader::Vertex, ":/shader/framebuffer.vert");
+     if (!success) {
+         qDebug() << "cube addShaderFromSourceFile failed!" << m_program->log();
+         return;
+     }
+
+     //加载片段着色器程序
+   success = m_program->addShaderFromSourceFile(QOpenGLShader::Fragment, ":/shader/framebuffer.frag");
+   if (!success) {
+       qDebug() << "cube addShaderFromSourceFile failed!" << m_program->log();
+       return;
+   }
+     //链接着色器程序
+     success = m_program->link();
+
+     if(!success) {
+            qDebug() << "shaderProgram link failed!" << m_program->log();
+        }
+
+    float quadVertices[] = { // vertex attributes for a quad that fills the entire screen in Normalized Device Coordinates.
+          // positions   // texCoords
+          -1.0f,  1.0f,  0.0f, 1.0f,
+          -1.0f, -1.0f,  0.0f, 0.0f,
+           1.0f, -1.0f,  1.0f, 0.0f,
+
+          -1.0f,  1.0f,  0.0f, 1.0f,
+           1.0f, -1.0f,  1.0f, 0.0f,
+           1.0f,  1.0f,  1.0f, 1.0f
+      };
+    // screen quad VAO
+    m_vao=new QOpenGLVertexArrayObject;
+    m_vbo=new QOpenGLBuffer(QOpenGLBuffer::VertexBuffer);
+
+    QOpenGLVertexArrayObject::Binder vaoBind(m_vao);
+    m_vbo->create();
+    m_vbo->bind();
+    m_vbo->allocate(quadVertices, sizeof(quadVertices));
+    int attr = -1;
+    attr = m_program->attributeLocation("aPos");
+    m_program->setAttributeBuffer(attr, GL_FLOAT, 0, 2, sizeof(GLfloat) * 4);
+    m_program->enableAttributeArray(attr);
+
+    int texattr=-1;
+    texattr=m_program->attributeLocation("aTexCoords");
+    m_program->setAttributeBuffer(texattr,GL_FLOAT,sizeof(GLfloat) * 2,2,sizeof(GLfloat) * 4);
+    m_program->enableAttributeArray(texattr);
+    m_vbo->release();
+    m_vao->release();
+    fbo=new QOpenGLFramebufferObject(this->width(),this->height(),QOpenGLFramebufferObject::Depth);
+    //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 }
 
 void MyGLWidget::paintGL()
 {
 
-    /*清空颜色缓存，深度缓存，模板缓存*/
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-    //此时所有片段的模板缓冲内都是0
-   // glEnable(GL_STENCIL_BUFFER_BIT);
-
+    bool result = fbo->bind();
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glDisable( GL_CULL_FACE);
     switch (curdepthfunc) {
     case DEPTHFUNC::LESS:
     {
@@ -162,16 +224,11 @@ void MyGLWidget::paintGL()
     }
 
     }
-  //  glStencilMask(0x00);//1.1禁止写入模板缓冲
-    plane->Render();//1.2绘制地板平面，此时不会影响模板缓冲，测试总是通过
-
-   // glStencilFunc(GL_ALWAYS, 1, 0xFF);//2.1设置模板测试函数，当前总是通过测试，并将对应片段的模板缓冲设置为1
-  //  glStencilMask(0xFF);//2.2 开启模板缓冲
-
+    plane->Render();
+    glEnable( GL_CULL_FACE);
     QVector<Shape*>::iterator i;
     for(i=cubevec.begin();i!=cubevec.end();++i)
     {
-        //2.2绘制箱子，此时其对应的片段的模板缓冲是1 ，其余部分仍旧为0
         (*i)->Render();
     }
 
@@ -184,6 +241,7 @@ void MyGLWidget::paintGL()
         sorted[distance] = windows[j];
 
     }
+     glDisable(GL_CULL_FACE);
     int count=0;
     for(std::map<float,QVector3D>::reverse_iterator  it=sorted.rbegin();it!=sorted.rend();++it)
     {
@@ -191,6 +249,35 @@ void MyGLWidget::paintGL()
         grassvec[count]->Render();
         count++;
     }
+
+    if(result)
+    {
+        GLuint textureid=fbo->texture();
+        fbo->release();
+      //   QImage img= fbo->toImage();
+      //   img.save("rendertotexture.jpg");
+        m_program->bind();
+        {
+         // bind textures on corresponding texture units
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, textureid);
+        glUniform1i(m_program->uniformLocation("screenTexture"), 0);
+        QMatrix4x4 view=m_camera->GetViewMatrix();
+        m_program->setUniformValue("view", view);
+
+        QMatrix4x4 projection;
+        projection.perspective(m_camera->Zoom, 1.0f * this->width() /this->height(), 0.1f, 100.0f);
+        m_program->setUniformValue("projection", projection);
+
+        QOpenGLVertexArrayObject::Binder vaoBind(m_vao);
+        glDrawArrays(GL_TRIANGLES, 0, 6);
+
+
+        }
+       m_program->release();
+
+    }
+
    /*   for(i=grassvec.begin();i!=grassvec.end();++i)
     {
          (*i)->Render();
@@ -254,6 +341,7 @@ plane->Resize(width,height);
 
 void MyGLWidget::StartAnimate(bool flag)
  {
+
    animateflag=!animateflag;
 
      if(animateflag)

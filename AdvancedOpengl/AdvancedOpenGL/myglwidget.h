@@ -3,10 +3,15 @@
 
 #include<QOpenGLWidget>
 #include<QOpenGLFunctions>
+#include<QOpenGLBuffer>
+#include<QOpenGLVertexArrayObject>
+class QOpenGLShaderProgram;
 class Shape;
 class QTimer;
 class Camera;
 class Plane;
+class QOpenGLTexture;
+class QOpenGLFramebufferObject;
 
 enum DEPTHFUNC {ALWAYS, NEVER, LESS, EQUAL,LEQUAL,GREATER,NOTEQUAL,GEQUAL};
 
@@ -52,6 +57,11 @@ private:
 
     int m_frame;
     DEPTHFUNC curdepthfunc;
+    QOpenGLBuffer* m_vbo;//顶点缓冲对象
+    QOpenGLVertexArrayObject* m_vao;//顶点数组对象
+    QOpenGLShaderProgram *m_program;
+   // QOpenGLTexture * screenTexture;
+    QOpenGLFramebufferObject *fbo;
 
 
 };

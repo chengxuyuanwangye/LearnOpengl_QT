@@ -15,5 +15,7 @@
         <file>cubeframe.vert</file>
         <file>vegetation.frag</file>
         <file>vegetation.vert</file>
+        <file>framebuffer.vert</file>
+        <file>framebuffer.frag</file>
     </qresource>
 </RCC>

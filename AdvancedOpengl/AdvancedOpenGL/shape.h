@@ -19,6 +19,7 @@ public:
     virtual void SetTranslateVec(QVector3D vec)=0;
     Camera* ShapeCamera;
 protected:
+    bool CreateShaderProgram(QString vertexpath,QString fragpath);
     QOpenGLBuffer* m_vbo;//顶点缓冲对象
     QOpenGLBuffer* m_ebo;//索引缓冲对象
     QOpenGLVertexArrayObject* m_vao;//顶点数组对象

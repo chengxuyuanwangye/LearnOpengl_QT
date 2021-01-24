@@ -18,25 +18,9 @@ CubeFrame::CubeFrame(int width,int height):
     m_vao=nullptr;//顶点数组对象
     m_program=nullptr;
     initializeOpenGLFunctions();
-    m_program = new QOpenGLShaderProgram(this);
-    bool success = m_program->addShaderFromSourceFile(QOpenGLShader::Vertex, ":/shader/cubeframe.vert");
-    if (!success) {
-        qDebug() << "cube addShaderFromSourceFile failed!" << m_program->log();
-        return;
-    }
 
-    //加载片段着色器程序
-    success = m_program->addShaderFromSourceFile(QOpenGLShader::Fragment, ":/shader/cubeframe.frag");
-    if (!success) {
-        qDebug() << "cube addShaderFromSourceFile failed!" << m_program->log();
-        return;
-    }
-    //链接着色器程序
-    success = m_program->link();
-
-    if(!success) {
-           qDebug() << "shaderProgram link failed!" << m_program->log();
-       }
+    bool shadersuccess=  CreateShaderProgram(":/shader/cubeframe.vert",":/shader/cubeframe.vert");
+  if(!shadersuccess)return;
 
  //VAO，VBO数据部分
     GLfloat vertices[] = {

@@ -10,7 +10,8 @@ SOURCES += \
     shape.cpp \
     plane.cpp \
     cubeframe.cpp \
-    vegetation.cpp
+    vegetation.cpp \
+    skycube.cpp
 
 HEADERS += \
     camera.h \
@@ -20,7 +21,8 @@ HEADERS += \
     shape.h \
     plane.h \
     cubeframe.h \
-    vegetation.h
+    vegetation.h \
+    skycube.h
 
 RESOURCES += \
     shader.qrc

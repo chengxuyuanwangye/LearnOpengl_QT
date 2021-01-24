@@ -12,6 +12,7 @@ class Camera;
 class Plane;
 class QOpenGLTexture;
 class QOpenGLFramebufferObject;
+class SkyCube;
 
 enum DEPTHFUNC {ALWAYS, NEVER, LESS, EQUAL,LEQUAL,GREATER,NOTEQUAL,GEQUAL};
 
@@ -40,10 +41,12 @@ private:
     QVector<Shape*> grassvec;
     QVector<QVector3D> windows;
     Plane* plane;
+    SkyCube *sky;
 
     QTimer* m_timer;
     bool animateflag;
     void timeoutFunc();
+    void DepthFunc();
     Camera* m_camera;
 
     float lastX ;
@@ -61,7 +64,8 @@ private:
     QOpenGLVertexArrayObject* m_vao;//顶点数组对象
     QOpenGLShaderProgram *m_program;
    // QOpenGLTexture * screenTexture;
-    QOpenGLFramebufferObject *fbo;
+  //  QOpenGLFramebufferObject *fbo;
+
 
 
 };

@@ -48,4 +48,29 @@ void Shape::Render()
  {
 
  }
+ bool Shape::CreateShaderProgram(QString vertexpath,QString fragpath)
+ {
+
+    m_program = new QOpenGLShaderProgram(this);
+    bool success = m_program->addShaderFromSourceFile(QOpenGLShader::Vertex, vertexpath);
+     if (!success) {
+         qDebug() << "cube addShaderFromSourceFile failed!" << m_program->log();
+         return false;
+     }
+
+     //加载片段着色器程序
+   success = m_program->addShaderFromSourceFile(QOpenGLShader::Fragment, fragpath);
+   if (!success) {
+       qDebug() << "cube addShaderFromSourceFile failed!" << m_program->log();
+       return false;
+   }
+     //链接着色器程序
+     success = m_program->link();
+
+     if(!success) {
+            qDebug() << "shaderProgram link failed!" << m_program->log();
+        }
+     return true;
+
+ }
 

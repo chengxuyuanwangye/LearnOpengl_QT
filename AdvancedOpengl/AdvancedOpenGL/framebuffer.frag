@@ -10,8 +10,8 @@ const float offset = 1.0 / 300.0;
 void main()
 {
     //original rendering
-    // vec3 col = texture(screenTexture, TexCoords).rgb;
-    //  FragColor = vec4(col, 1.0);
+     vec3 col = texture(screenTexture, TexCoords).rgb;
+      FragColor = vec4(col, 1.0);
     //inverse
     //  FragColor = vec4(vec3(1.0 - texture(screenTexture, TexCoords)), 1.0);
     //gray image
@@ -39,21 +39,22 @@ void main()
              -1, -1, -1
              );*/
     //blur
-    /*float kernel[9] = float[](
+  /*  float kernel[9] = float[](
         1.0 / 16, 2.0 / 16, 1.0 / 16,
         2.0 / 16, 4.0 / 16, 2.0 / 16,
         1.0 / 16, 2.0 / 16, 1.0 / 16
     );*/
     //Edge-detection
 
-    float kernel[9] = float[](
+   /* float kernel[9] = float[](
             1, 1, 1,
              1,  -8, 1,
              1, 1, 1
         );
+        */
 
 
-    vec3 sampleTex[9];
+  /*  vec3 sampleTex[9];
     for(int i = 0; i < 9; i++)
     {
         sampleTex[i] = vec3(texture(screenTexture, TexCoords.st + offsets[i]));
@@ -63,5 +64,6 @@ void main()
         col += sampleTex[i] * kernel[i];
 
     FragColor = vec4(col, 1.0);
+    */
 
 }

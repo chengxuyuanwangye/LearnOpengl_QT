@@ -23,48 +23,48 @@ Cube::Cube(int width,int height):
 
 //VAO，VBO数据部分
    GLfloat vertices[] = {
-       // Back face
-        -0.5f, -0.5f, -0.5f,  0.0f, 0.0f, // Bottom-left
-         0.5f,  0.5f, -0.5f,  1.0f, 1.0f, // top-right
-         0.5f, -0.5f, -0.5f,  1.0f, 0.0f, // bottom-right
-         0.5f,  0.5f, -0.5f,  1.0f, 1.0f, // top-right
-        -0.5f, -0.5f, -0.5f,  0.0f, 0.0f, // bottom-left
-        -0.5f,  0.5f, -0.5f,  0.0f, 1.0f, // top-left
-        // Front face
-        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f, // bottom-left
-         0.5f, -0.5f,  0.5f,  1.0f, 0.0f, // bottom-right
-         0.5f,  0.5f,  0.5f,  1.0f, 1.0f, // top-right
-         0.5f,  0.5f,  0.5f,  1.0f, 1.0f, // top-right
-        -0.5f,  0.5f,  0.5f,  0.0f, 1.0f, // top-left
-        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f, // bottom-left
-        // Left face
-        -0.5f,  0.5f,  0.5f,  1.0f, 0.0f, // top-right
-        -0.5f,  0.5f, -0.5f,  1.0f, 1.0f, // top-left
-        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f, // bottom-left
-        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f, // bottom-left
-        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f, // bottom-right
-        -0.5f,  0.5f,  0.5f,  1.0f, 0.0f, // top-right
-        // Right face
-         0.5f,  0.5f,  0.5f,  1.0f, 0.0f, // top-left
-         0.5f, -0.5f, -0.5f,  0.0f, 1.0f, // bottom-right
-         0.5f,  0.5f, -0.5f,  1.0f, 1.0f, // top-right
-         0.5f, -0.5f, -0.5f,  0.0f, 1.0f, // bottom-right
-         0.5f,  0.5f,  0.5f,  1.0f, 0.0f, // top-left
-         0.5f, -0.5f,  0.5f,  0.0f, 0.0f, // bottom-left
-        // Bottom face
-        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f, // top-right
-         0.5f, -0.5f, -0.5f,  1.0f, 1.0f, // top-left
-         0.5f, -0.5f,  0.5f,  1.0f, 0.0f, // bottom-left
-         0.5f, -0.5f,  0.5f,  1.0f, 0.0f, // bottom-left
-        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f, // bottom-right
-        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f, // top-right
-        // Top face
-        -0.5f,  0.5f, -0.5f,  0.0f, 1.0f, // top-left
-         0.5f,  0.5f,  0.5f,  1.0f, 0.0f, // bottom-right
-         0.5f,  0.5f, -0.5f,  1.0f, 1.0f, // top-right
-         0.5f,  0.5f,  0.5f,  1.0f, 0.0f, // bottom-right
-        -0.5f,  0.5f, -0.5f,  0.0f, 1.0f, // top-left
-        -0.5f,  0.5f,  0.5f,  0.0f, 0.0f  // bottom-left
+       // positions          // normals
+             -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
+              0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
+              0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
+              0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
+             -0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
+             -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
+
+             -0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
+              0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
+              0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
+              0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
+             -0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
+             -0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
+
+             -0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
+             -0.5f,  0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
+             -0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
+             -0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
+             -0.5f, -0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
+             -0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
+
+              0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
+              0.5f,  0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
+              0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
+              0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
+              0.5f, -0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
+              0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
+
+             -0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
+              0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
+              0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
+              0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
+             -0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
+             -0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
+
+             -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,
+              0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,
+              0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
+              0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
+             -0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
+             -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f
       };
 
    m_vao=new QOpenGLVertexArrayObject;
@@ -76,27 +76,16 @@ Cube::Cube(int width,int height):
    m_vbo->allocate(vertices, sizeof(vertices));
    int attr = -1;
    attr = m_program->attributeLocation("aPos");
-   m_program->setAttributeBuffer(attr, GL_FLOAT, 0, 3, sizeof(GLfloat) * 5);
+   m_program->setAttributeBuffer(attr, GL_FLOAT, 0, 3, sizeof(GLfloat) * 6);
    m_program->enableAttributeArray(attr);
 
    int texattr=-1;
-   texattr=m_program->attributeLocation("aTexCoord");
-   m_program->setAttributeBuffer(texattr,GL_FLOAT,sizeof(GLfloat) * 3,2,sizeof(GLfloat) * 5);
+   texattr=m_program->attributeLocation("aNormal");
+   m_program->setAttributeBuffer(texattr,GL_FLOAT,sizeof(GLfloat) * 3,3,sizeof(GLfloat) * 6);
    m_program->enableAttributeArray(texattr);
    m_vbo->release();
    m_vao->release();
-   ourtexture=new QOpenGLTexture(QImage(":/img/container2.png"), QOpenGLTexture::GenerateMipMaps);
-   if(!ourtexture->isCreated())
-   {
-       qDebug()<<"failed to load texture";
-   }
-   else {
-       ourtexture->setWrapMode(QOpenGLTexture::DirectionS, QOpenGLTexture::Repeat);
-       ourtexture->setWrapMode(QOpenGLTexture::DirectionT, QOpenGLTexture::Repeat);
-       ourtexture->setMinificationFilter(QOpenGLTexture::Linear);
-       ourtexture->setMagnificationFilter(QOpenGLTexture::Linear);
-   }
-
+   CreateCubeTexture();
    m_program->bind();
    QMatrix4x4 model;
    model.setToIdentity();
@@ -111,7 +100,7 @@ Cube::Cube(int width,int height):
    QMatrix4x4 projection;
    projection.perspective(45.0f, 1.0f * width / height, 0.1f, 100.0f);
    m_program->setUniformValue("projection", projection);
-   m_program->setUniformValue("ourTexture", 0);
+   m_program->setUniformValue("skybox", 0);
    m_program->release();
 
 }
@@ -126,22 +115,23 @@ void Cube::Render()
 {
     if(m_visible)
     {
-    m_program->bind();
-    {
-    glActiveTexture(GL_TEXTURE0);
-    ourtexture->bind();
-    QMatrix4x4 view=ShapeCamera->GetViewMatrix();
-    m_program->setUniformValue("view", view);
+        m_program->bind();
+        {
+            glActiveTexture(GL_TEXTURE0);
+            ourtexture->bind();
+            QMatrix4x4 view=ShapeCamera->GetViewMatrix();
+            m_program->setUniformValue("view", view);
 
-    QMatrix4x4 projection;
-    projection.perspective(ShapeCamera->Zoom, 1.0f * m_width / m_height, 0.1f, 100.0f);
-    m_program->setUniformValue("projection", projection);
+            QMatrix4x4 projection;
+            projection.perspective(ShapeCamera->Zoom, 1.0f * m_width / m_height, 0.1f, 100.0f);
+            m_program->setUniformValue("projection", projection);
+            m_program->setUniformValue("cameraPos",ShapeCamera->Position);
 
-    QOpenGLVertexArrayObject::Binder vaoBind(m_vao);
-    glDrawArrays(GL_TRIANGLES, 0, 36);
-    ourtexture->release();
-    }
-    m_program->release();
+            QOpenGLVertexArrayObject::Binder vaoBind(m_vao);
+            glDrawArrays(GL_TRIANGLES, 0, 36);
+            ourtexture->release();
+        }
+        m_program->release();
     }
 
 }
@@ -174,5 +164,53 @@ void Cube::SetTranslateVec(QVector3D vec)
     m_program->setUniformValue("model", model);
     }
     m_program->release();
+}
+
+
+void Cube::CreateCubeTexture()
+{
+    const QImage posright = QImage(":/img/skybox/right.jpg").convertToFormat(QImage::Format_RGBA8888);
+    const QImage posleft = QImage(":/img/skybox/left.jpg").convertToFormat(QImage::Format_RGBA8888);
+    const QImage postop = QImage(":/img/skybox/top.jpg").convertToFormat(QImage::Format_RGBA8888);
+    const QImage posbottom = QImage(":/img/skybox/bottom.jpg").convertToFormat(QImage::Format_RGBA8888);
+    const QImage posfront = QImage(":/img/skybox/front.jpg").convertToFormat(QImage::Format_RGBA8888);
+    const QImage posback = QImage(":/img/skybox/back.jpg").convertToFormat(QImage::Format_RGBA8888);
+
+
+
+    ourtexture=new QOpenGLTexture(QOpenGLTexture::TargetCubeMap);
+    ourtexture->create();
+    ourtexture->setSize(posright.width(),posright.height(),posright.depth());
+    ourtexture->setFormat(QOpenGLTexture::RGBA8_UNorm);
+    ourtexture->allocateStorage();
+    if(!ourtexture->isCreated())
+    {
+        qDebug()<<"failed to load texture";
+    }
+    else {
+        ourtexture->setData(0, 0, QOpenGLTexture::CubeMapPositiveX,
+                                QOpenGLTexture::RGBA, QOpenGLTexture::UInt8,
+                                (const void*)posright.constBits(), 0);
+
+        ourtexture->setData(0, 0, QOpenGLTexture::CubeMapNegativeX,
+                                QOpenGLTexture::RGBA, QOpenGLTexture::UInt8,
+                                (const void*)posleft.constBits(), 0);
+        ourtexture->setData(0, 0, QOpenGLTexture::CubeMapPositiveY,
+                                QOpenGLTexture::RGBA, QOpenGLTexture::UInt8,
+                                (const void*)postop.constBits(), 0);
+       ourtexture->setData(0, 0, QOpenGLTexture::CubeMapNegativeY,
+                                QOpenGLTexture::RGBA, QOpenGLTexture::UInt8,
+                                (const void*)posbottom.constBits(), 0);
+       ourtexture->setData(0, 0, QOpenGLTexture::CubeMapPositiveZ,
+                               QOpenGLTexture::RGBA, QOpenGLTexture::UInt8,
+                               (const void*)posfront.constBits(), 0);
+        ourtexture->setData(0, 0, QOpenGLTexture::CubeMapNegativeZ,
+                                QOpenGLTexture::RGBA, QOpenGLTexture::UInt8,
+                                (const void*)posback.constBits(), 0);
+
+        ourtexture->setWrapMode(QOpenGLTexture::ClampToEdge);
+        ourtexture->setMinificationFilter(QOpenGLTexture::LinearMipMapLinear);
+        ourtexture->setMagnificationFilter(QOpenGLTexture::LinearMipMapLinear);
+    }
 }
 

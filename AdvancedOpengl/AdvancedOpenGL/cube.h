@@ -17,6 +17,7 @@ public slots:
 private:
     int m_frame;
     QOpenGLTexture * ourtexture;
+     void CreateCubeTexture();
 
 };
 

@@ -16,7 +16,6 @@ Plane::Plane(int width,int height):
     m_vao=nullptr;//顶点数组对象
     m_program=nullptr;
     initializeOpenGLFunctions();
-    m_program = new QOpenGLShaderProgram(this);
 
     bool shadersuccess=  CreateShaderProgram( ":/shader/cube.vert",":/shader/cube.frag");
     if(!shadersuccess)return;

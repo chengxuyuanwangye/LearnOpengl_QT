@@ -70,6 +70,7 @@ Cube::Cube(int width,int height):
    m_vao=new QOpenGLVertexArrayObject;
    m_vbo=new QOpenGLBuffer(QOpenGLBuffer::VertexBuffer);
 
+
    QOpenGLVertexArrayObject::Binder vaoBind(m_vao);
    m_vbo->create();
    m_vbo->bind();
@@ -83,8 +84,8 @@ Cube::Cube(int width,int height):
    texattr=m_program->attributeLocation("aNormal");
    m_program->setAttributeBuffer(texattr,GL_FLOAT,sizeof(GLfloat) * 3,3,sizeof(GLfloat) * 6);
    m_program->enableAttributeArray(texattr);
-   m_vbo->release();
    m_vao->release();
+   m_vbo->release();
    CreateCubeTexture();
    m_program->bind();
    QMatrix4x4 model;
@@ -115,6 +116,7 @@ void Cube::Render()
 {
     if(m_visible)
     {
+        //glEnable(GL_PROGRAM_POINT_SIZE);
         m_program->bind();
         {
             glActiveTexture(GL_TEXTURE0);
@@ -132,6 +134,8 @@ void Cube::Render()
             ourtexture->release();
         }
         m_program->release();
+        glDisable(GL_PROGRAM_POINT_SIZE);
+
     }
 
 }

@@ -20,6 +20,7 @@
 #include"cubeframe.h"
 #include"vegetation.h"
 #include"skycube.h"
+#include"room.h"
 MyGLWidget::MyGLWidget(QWidget *parent):
     QOpenGLWidget (parent),
     animateflag(false),
@@ -73,6 +74,8 @@ void MyGLWidget::initializeGL()
     Cube* cub=new Cube(width(),height());
     cubevec.append(cub);
     cub->ShapeCamera=m_camera;
+    Room* room=new Room(width(),height());
+    cubevec.append(room);
 
 
 

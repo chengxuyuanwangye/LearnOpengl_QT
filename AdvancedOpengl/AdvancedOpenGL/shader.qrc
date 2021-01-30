@@ -25,5 +25,9 @@
         <file>framebuffer.frag</file>
         <file>skybox.frag</file>
         <file>skybox.vert</file>
+        <file>room.frag</file>
+        <file>room.vert</file>
+        <file>room.geom</file>
     </qresource>
+    <qresource prefix="/"/>
 </RCC>

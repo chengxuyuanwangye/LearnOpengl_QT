@@ -27,8 +27,6 @@ protected:
     bool m_visible;
     int m_width;
     int m_height;
-
-
 };
 
 

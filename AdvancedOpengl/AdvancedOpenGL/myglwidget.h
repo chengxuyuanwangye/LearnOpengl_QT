@@ -5,6 +5,7 @@
 #include<QOpenGLFunctions>
 #include<QOpenGLBuffer>
 #include<QOpenGLVertexArrayObject>
+#include<QOpenGLContext>
 class QOpenGLShaderProgram;
 class Shape;
 class QTimer;
@@ -66,6 +67,7 @@ private:
    // QOpenGLTexture * screenTexture;
   //  QOpenGLFramebufferObject *fbo;
 
+      QOpenGLContext *_context;
 
 
 };

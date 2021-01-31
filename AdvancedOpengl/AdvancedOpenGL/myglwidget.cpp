@@ -21,6 +21,7 @@
 #include"vegetation.h"
 #include"skycube.h"
 #include"room.h"
+#include"multirect.h"
 MyGLWidget::MyGLWidget(QWidget *parent):
     QOpenGLWidget (parent),
     animateflag(false),
@@ -69,15 +70,25 @@ MyGLWidget::~MyGLWidget()
 void MyGLWidget::initializeGL()
 {
     // 为当前环境初始化OpenGL函数
+
+  /*  _context = new QOpenGLContext(this);
+        QSurfaceFormat format;
+        format.setVersion(3,3);
+        format.setDepthBufferSize(24);
+
+        _context->setFormat(format);
+        _context->create();*/
+
     initializeOpenGLFunctions();
 
     Cube* cub=new Cube(width(),height());
     cubevec.append(cub);
     cub->ShapeCamera=m_camera;
-    Room* room=new Room(width(),height());
-    cubevec.append(room);
+   // Room* room=new Room(width(),height());
+   // cubevec.append(room);
 
-
+    MultiRect* rect=new MultiRect(width(),height(),QOpenGLContext::currentContext());
+    cubevec.append(rect);
 
     windows.push_front(QVector3D(-1.5f, 0.0f, -0.48f));
     windows.push_front( QVector3D( 1.5f, 0.0f, 0.51f));

@@ -28,6 +28,8 @@
         <file>room.frag</file>
         <file>room.vert</file>
         <file>room.geom</file>
+        <file>multirect.frag</file>
+        <file>multirect.vert</file>
     </qresource>
     <qresource prefix="/"/>
 </RCC>

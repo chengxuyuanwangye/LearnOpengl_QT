@@ -12,7 +12,8 @@ SOURCES += \
     cubeframe.cpp \
     vegetation.cpp \
     skycube.cpp \
-    room.cpp
+    room.cpp \
+    multirect.cpp
 
 HEADERS += \
     camera.h \
@@ -24,7 +25,8 @@ HEADERS += \
     cubeframe.h \
     vegetation.h \
     skycube.h \
-    room.h
+    room.h \
+    multirect.h
 
 RESOURCES += \
     shader.qrc

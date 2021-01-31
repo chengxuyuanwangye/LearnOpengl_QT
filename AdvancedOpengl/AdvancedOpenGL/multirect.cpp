@@ -13,6 +13,7 @@ MultiRect::MultiRect(int width,int height, QOpenGLContext *context):
     m_vbo=nullptr;//顶点缓冲对象
     m_ebo=nullptr;//索引缓冲对象
     m_vao=nullptr;//顶点数组对象
+    m_instanceVBO=nullptr;
     m_program=nullptr;
     initializeOpenGLFunctions();
     _context =context;
@@ -29,25 +30,6 @@ MultiRect::MultiRect(int width,int height, QOpenGLContext *context):
         0.05f, -0.05f,  0.0f, 1.0f, 0.0f,
         0.05f,  0.05f,  0.0f, 1.0f, 1.0f
     };
-    m_vao=new QOpenGLVertexArrayObject;
-    m_vbo=new QOpenGLBuffer(QOpenGLBuffer::VertexBuffer);
-
-    QOpenGLVertexArrayObject::Binder vaobind(m_vao);
-    m_vbo->create();
-    m_vbo->bind();
-    m_vbo->allocate(quadVertices, sizeof(quadVertices));
-
-    int attr = -1;
-    attr = m_program->attributeLocation("aPos");
-    m_program->setAttributeBuffer(attr, GL_FLOAT, 0, 2, sizeof(GLfloat) * 5);
-    m_program->enableAttributeArray(attr);
-    attr = m_program->attributeLocation("aColor");
-    m_program->setAttributeBuffer(attr, GL_FLOAT, sizeof(GLfloat) * 2, 3, sizeof(GLfloat) * 5);
-    m_program->enableAttributeArray(attr);
-
-    m_vao->release();
-    m_vbo->release();
-    m_program->bind();
     QVector2D translations[100];
     int index = 0;
     float offset = 0.1f;
@@ -61,13 +43,41 @@ MultiRect::MultiRect(int width,int height, QOpenGLContext *context):
             translations[index++] = translation;
         }
     }
+    m_vao=new QOpenGLVertexArrayObject;
+    m_vbo=new QOpenGLBuffer(QOpenGLBuffer::VertexBuffer);
 
-    for(unsigned int i = 0; i < 100; i++)
-    {
-        QString indexstr=QString("offsets[%1]").arg(i);
-        QByteArray ba = indexstr.toLatin1();
-        m_program->setUniformValue(ba.data(), translations[i]);
-    }
+    QOpenGLVertexArrayObject::Binder vaobind(m_vao);
+    m_vbo->create();
+    m_vbo->bind();
+    m_vbo->allocate(quadVertices, sizeof(quadVertices));
+
+    m_program->bind();
+    int attr = -1;
+    attr = m_program->attributeLocation("aPos");
+    m_program->setAttributeBuffer(attr, GL_FLOAT, 0, 2, sizeof(GLfloat) * 5);
+    m_program->enableAttributeArray(attr);
+
+    attr = m_program->attributeLocation("aColor");
+    m_program->setAttributeBuffer(attr, GL_FLOAT, sizeof(GLfloat) * 2, 3, sizeof(GLfloat) * 5);
+    m_program->enableAttributeArray(attr);
+    m_vbo->release();
+
+    m_instanceVBO=new QOpenGLBuffer(QOpenGLBuffer::VertexBuffer);
+    m_instanceVBO->create();
+    m_instanceVBO->setUsagePattern(QOpenGLBuffer::StaticDraw);
+    m_instanceVBO->bind();
+    m_instanceVBO->allocate(translations,sizeof(QVector2D)*100);
+
+    attr = m_program->attributeLocation("aOffset");
+    m_program->setAttributeBuffer(attr, GL_FLOAT, 0, 2, sizeof(GLfloat) * 2);
+    m_program->enableAttributeArray(attr);
+
+
+    m_instanceVBO->release();
+    QOpenGLExtraFunctions *f =context->extraFunctions();
+    f->glVertexAttribDivisor((GLint)attr,1);
+
+
     m_program->release();
 }
 
@@ -76,7 +86,8 @@ MultiRect::MultiRect(int width,int height, QOpenGLContext *context):
 
 MultiRect::~MultiRect()
 {
-
+ if(m_instanceVBO!=nullptr)
+     delete m_instanceVBO;
 }
 
 
@@ -88,9 +99,7 @@ void MultiRect::Render()
     m_program->bind();
     {
         m_vao->bind();
-        GLenum result= glGetError();
         f->glDrawArraysInstanced(GL_TRIANGLES, 0, 6, 100);
-        result= glGetError();
         m_vao->release();
     }
     m_program->release();

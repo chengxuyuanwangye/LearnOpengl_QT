@@ -13,6 +13,7 @@ public:
     virtual void SetTranslateVec(QVector3D vec);
     private:
      QOpenGLContext *_context;
+     QOpenGLBuffer * m_instanceVBO;
 };
 
 #endif // MULTIRECT_H

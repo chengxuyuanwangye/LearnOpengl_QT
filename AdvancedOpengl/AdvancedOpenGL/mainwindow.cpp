@@ -13,7 +13,7 @@
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent)
 {
- setWindowTitle(tr("Hello Triangle"));
+ setWindowTitle(tr("Advanced OpenGL"));
  this->setMinimumSize(800,400);
  centralWidget = new QWidget(this);
  centralWidget->setObjectName(QString::fromUtf8("centralWidget"));
@@ -21,7 +21,7 @@ MainWindow::MainWindow(QWidget *parent) :
  centreimgwidget->setGeometry(QRect(0, 0, 351, 251));
  QSurfaceFormat format;
  //设置像素采样的样本个数，用于抗锯齿
- format.setSamples(16);
+ format.setSamples(8);//16
  centreimgwidget->setFormat(format);
  this->setCentralWidget(centralWidget);
  createDockTool();

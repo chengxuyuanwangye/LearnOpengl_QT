@@ -22,6 +22,7 @@
 #include"skycube.h"
 #include"room.h"
 #include"multirect.h"
+#include "catmullromspline.h"
 MyGLWidget::MyGLWidget(QWidget *parent):
     QOpenGLWidget (parent),
     animateflag(false),
@@ -70,28 +71,19 @@ MyGLWidget::~MyGLWidget()
 void MyGLWidget::initializeGL()
 {
     // 为当前环境初始化OpenGL函数
-
-  /*  _context = new QOpenGLContext(this);
-        QSurfaceFormat format;
-        format.setVersion(3,3);
-        format.setDepthBufferSize(24);
-
-        _context->setFormat(format);
-        _context->create();*/
-
     initializeOpenGLFunctions();
 
-    Cube* cub=new Cube(width(),height());
-    cubevec.append(cub);
-    cub->ShapeCamera=m_camera;
-   // Room* room=new Room(width(),height());
-   // cubevec.append(room);
+  //  Cube* cub=new Cube(width(),height());
+  //  cubevec.append(cub);
+  //  cub->ShapeCamera=m_camera;
+    CatmullRomSpline* cromspline=new CatmullRomSpline(width(),height());
+    cubevec.append(cromspline);
 
-    MultiRect* rect=new MultiRect(width(),height(),QOpenGLContext::currentContext());
-    cubevec.append(rect);
+  //  MultiRect* rect=new MultiRect(width(),height(),QOpenGLContext::currentContext());
+  //  cubevec.append(rect);
 
     windows.push_front(QVector3D(-1.5f, 0.0f, -0.48f));
-    windows.push_front( QVector3D( 1.5f, 0.0f, 0.51f));
+    windows.push_front(QVector3D( 1.5f, 0.0f, 0.51f));
     windows.push_front(QVector3D( 0.0f, 0.0f, 0.7f));
     windows.push_front(QVector3D(-0.3f, 0.0f, -2.3f));
     windows.push_front(QVector3D (0.5f, 0.0f, -0.6f));
@@ -116,11 +108,14 @@ void MyGLWidget::initializeGL()
     sky->ChangeVisible(true);
 
     glEnable(GL_DEPTH_TEST);
+    //glDisable(GL_MULTISAMPLE);
+    glEnable(GL_MULTISAMPLE);
 
 }
 
 void MyGLWidget::paintGL()
 {
+
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     //plane->Render();
     QVector<Shape*>::iterator i;

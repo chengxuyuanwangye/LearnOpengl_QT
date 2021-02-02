@@ -30,6 +30,9 @@
         <file>room.geom</file>
         <file>multirect.frag</file>
         <file>multirect.vert</file>
+        <file>CatmullRomSpline.frag</file>
+        <file>CatmullRomSpline.vert</file>
+        <file>CatmullRomSpline.geom</file>
     </qresource>
     <qresource prefix="/"/>
 </RCC>

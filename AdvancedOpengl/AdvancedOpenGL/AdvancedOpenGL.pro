@@ -13,7 +13,8 @@ SOURCES += \
     vegetation.cpp \
     skycube.cpp \
     room.cpp \
-    multirect.cpp
+    multirect.cpp \
+    catmullromspline.cpp
 
 HEADERS += \
     camera.h \
@@ -26,7 +27,8 @@ HEADERS += \
     vegetation.h \
     skycube.h \
     room.h \
-    multirect.h
+    multirect.h \
+    catmullromspline.h
 
 RESOURCES += \
     shader.qrc

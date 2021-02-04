@@ -33,6 +33,7 @@ MyGLWidget::MyGLWidget(QWidget *parent):
     m_frame(0),
     curdepthfunc(DEPTHFUNC::LESS)
 {
+    fbo=nullptr;
     plane=nullptr;
     m_timer=new QTimer(this);
     m_timer->setInterval(60);
@@ -61,9 +62,9 @@ MyGLWidget::~MyGLWidget()
         delete plane;
     delete m_camera;
     delete sky;
-    //  delete screenTexture;
     if(m_vbo!=nullptr)delete m_vbo;
     if(m_vao!=nullptr)delete m_vao;
+    if(fbo!=nullptr)delete  fbo;
     delete m_program;
     doneCurrent();
 }
@@ -73,14 +74,14 @@ void MyGLWidget::initializeGL()
     // 为当前环境初始化OpenGL函数
     initializeOpenGLFunctions();
 
-  //  Cube* cub=new Cube(width(),height());
-  //  cubevec.append(cub);
-  //  cub->ShapeCamera=m_camera;
+      Cube* cub=new Cube(width(),height());
+      cubevec.append(cub);
+      cub->ShapeCamera=m_camera;
     CatmullRomSpline* cromspline=new CatmullRomSpline(width(),height());
     cubevec.append(cromspline);
 
-  //  MultiRect* rect=new MultiRect(width(),height(),QOpenGLContext::currentContext());
-  //  cubevec.append(rect);
+    //  MultiRect* rect=new MultiRect(width(),height(),QOpenGLContext::currentContext());
+    //  cubevec.append(rect);
 
     windows.push_front(QVector3D(-1.5f, 0.0f, -0.48f));
     windows.push_front(QVector3D( 1.5f, 0.0f, 0.51f));
@@ -106,7 +107,60 @@ void MyGLWidget::initializeGL()
     sky=new SkyCube(width(),height());
     sky->ShapeCamera=m_camera;
     sky->ChangeVisible(true);
+    //创建FBO相关
+    bool programflag=CreateFBOShaderProgram();
+    float quadVertices[] = {
+        // positions   // texCoords
+        -1.0f,  1.0f,  0.0f, 1.0f,
+        -1.0f, -1.0f,  0.0f, 0.0f,
+        1.0f, -1.0f,  1.0f, 0.0f,
 
+        -1.0f,  1.0f,  0.0f, 1.0f,
+        1.0f, -1.0f,  1.0f, 0.0f,
+        1.0f,  1.0f,  1.0f, 1.0f
+    };
+    if(programflag)
+    {
+        m_vao=new QOpenGLVertexArrayObject;
+        m_vao->bind();
+        m_vbo=new QOpenGLBuffer(QOpenGLBuffer::VertexBuffer);
+        m_vbo->create();
+        m_vbo->bind();
+        m_vbo->allocate(quadVertices,sizeof(quadVertices));
+        int attr = -1;
+        attr = m_program->attributeLocation("aPos");
+        m_program->setAttributeBuffer(attr, GL_FLOAT, 0, 2, sizeof(GLfloat) * 4);
+        m_program->enableAttributeArray(attr);
+
+        int texattr=-1;
+        texattr=m_program->attributeLocation("aTexCoords");
+        m_program->setAttributeBuffer(texattr,GL_FLOAT,sizeof(GLfloat) * 2,2,sizeof(GLfloat) * 4);
+        m_program->enableAttributeArray(texattr);
+
+        m_vbo->release();
+        m_vao->release();
+
+        //MultiSampling set to 4 now
+        QOpenGLFramebufferObjectFormat muliSampleFormat;
+        muliSampleFormat.setAttachment(QOpenGLFramebufferObject::CombinedDepthStencil);
+        muliSampleFormat.setMipmap(true);
+        muliSampleFormat.setSamples(4);
+        muliSampleFormat.setTextureTarget(GL_TEXTURE_2D);
+        muliSampleFormat.setInternalTextureFormat(GL_RGBA32F_ARB);
+
+        //fbo=new QOpenGLFramebufferObject(this->width(),this->height(),QOpenGLFramebufferObject::Depth);
+        fbo=new QOpenGLFramebufferObject(this->width(),this->height(),muliSampleFormat);
+
+        QOpenGLFramebufferObjectFormat downSampledFormat;
+        downSampledFormat.setAttachment(QOpenGLFramebufferObject::CombinedDepthStencil);
+        downSampledFormat.setMipmap(true);
+        downSampledFormat.setTextureTarget(GL_TEXTURE_2D);
+        downSampledFormat.setInternalTextureFormat(GL_RGBA32F_ARB);
+
+        renderfbo=new QOpenGLFramebufferObject(this->width(),this->height(),downSampledFormat);
+         bool  bValid = fbo->isValid();
+         qDebug()<<"bValid="<<bValid;
+    }
     glEnable(GL_DEPTH_TEST);
     //glDisable(GL_MULTISAMPLE);
     glEnable(GL_MULTISAMPLE);
@@ -115,17 +169,58 @@ void MyGLWidget::initializeGL()
 
 void MyGLWidget::paintGL()
 {
-
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    //plane->Render();
-    QVector<Shape*>::iterator i;
-    for(i=cubevec.begin();i!=cubevec.end();++i)
+    if(fbo!=nullptr)
     {
-        (*i)->Render();
+        bool result = fbo->bind();
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        QVector<Shape*>::iterator i;
+        for(i=cubevec.begin();i!=cubevec.end();++i)
+        {
+            (*i)->Render();
+        }
+        glDepthFunc(GL_LEQUAL);
+        sky->Render();
+        glDepthFunc(GL_LESS); // set depth function back to default
+        glDisable(GL_CULL_FACE);
+        if(result)
+        {
+          //  GLuint textureid=fbo->texture();
+
+            fbo->release();
+            renderfbo->bind();
+            QOpenGLFramebufferObject::blitFramebuffer(renderfbo,fbo,GL_COLOR_BUFFER_BIT| GL_DEPTH_BUFFER_BIT| GL_STENCIL_BUFFER_BIT,GL_NEAREST);
+            renderfbo->release();
+            GLuint textureid=renderfbo->texture();
+
+            m_program->bind();
+            {
+                // bind textures on corresponding texture units
+                glActiveTexture(GL_TEXTURE0);
+                glBindTexture(GL_TEXTURE_2D, textureid);
+                //GLenum glerr= glGetError();
+                glUniform1i(m_program->uniformLocation("screenTexture"), 0);
+                m_vao->bind();
+                glDrawArrays(GL_TRIANGLES, 0, 6);
+                m_vao->release();
+
+            }
+            m_program->release();
+        }
+
     }
-      glDepthFunc(GL_LEQUAL);
-      sky->Render();
-      glDepthFunc(GL_LESS); // set depth function back to default
+    else {
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        //plane->Render();
+        QVector<Shape*>::iterator i;
+        for(i=cubevec.begin();i!=cubevec.end();++i)
+        {
+            (*i)->Render();
+        }
+        glDepthFunc(GL_LEQUAL);
+        sky->Render();
+        glDepthFunc(GL_LESS); // set depth function back to default
+
+    }
 }
 
 void MyGLWidget::EnableCube()
@@ -298,7 +393,7 @@ void MyGLWidget::StartAnimate(bool flag)
      curdepthfunc=depthfunc;
  }
 
-  void  MyGLWidget::DepthFunc()
+ void  MyGLWidget::DepthFunc()
   {
       switch (curdepthfunc) {
       case DEPTHFUNC::LESS:
@@ -345,5 +440,31 @@ void MyGLWidget::StartAnimate(bool flag)
       }
 
       }
+
+  }
+
+  bool MyGLWidget::CreateFBOShaderProgram()
+  {
+      m_program = new QOpenGLShaderProgram(this);
+      bool success = m_program->addShaderFromSourceFile(QOpenGLShader::Vertex, ":/shader/framebuffer.vert");
+      if (!success) {
+          qDebug() << "FBO addShaderFromSourceFile failed!" << m_program->log();
+          return false;
+      }
+
+      //加载片段着色器程序
+      success = m_program->addShaderFromSourceFile(QOpenGLShader::Fragment, ":/shader/framebuffer.frag");
+      if (!success) {
+          qDebug() << "FBO addShaderFromSourceFile failed!" << m_program->log();
+          return false;
+      }
+      //链接着色器程序
+      success = m_program->link();
+
+      if(!success) {
+          qDebug() << "shaderProgram link failed!" << m_program->log();
+          return false;
+      }
+      return success;
 
   }

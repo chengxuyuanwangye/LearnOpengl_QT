@@ -10,8 +10,8 @@ const float offset = 1.0 / 300.0;
 void main()
 {
     //original rendering
-     vec3 col = texture(screenTexture, TexCoords).rgb;
-      FragColor = vec4(col, 1.0);
+    vec3 col = texture(screenTexture, TexCoords).rgb;
+     FragColor = vec4(col, 1.0);
     //inverse
     //  FragColor = vec4(vec3(1.0 - texture(screenTexture, TexCoords)), 1.0);
     //gray image
@@ -21,7 +21,7 @@ void main()
 
     //sharpen
 
-    vec2 offsets[9] = vec2[](
+  /*  vec2 offsets[9] = vec2[](
             vec2(-offset,  offset), // 左上
             vec2( 0.0f,    offset), // 正上
             vec2( offset,  offset), // 右上
@@ -31,7 +31,7 @@ void main()
             vec2(-offset, -offset), // 左下
             vec2( 0.0f,   -offset), // 正下
             vec2( offset, -offset)  // 右下
-            );
+            );*/
 
    /* float kernel[9] = float[](
             -1, -1, -1,

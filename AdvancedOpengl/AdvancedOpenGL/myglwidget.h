@@ -48,6 +48,7 @@ private:
     bool animateflag;
     void timeoutFunc();
     void DepthFunc();
+    bool CreateFBOShaderProgram();
     Camera* m_camera;
 
     float lastX ;
@@ -65,9 +66,9 @@ private:
     QOpenGLVertexArrayObject* m_vao;//顶点数组对象
     QOpenGLShaderProgram *m_program;
    // QOpenGLTexture * screenTexture;
-  //  QOpenGLFramebufferObject *fbo;
-
-      QOpenGLContext *_context;
+    QOpenGLFramebufferObject *fbo;//fbo used for multisample
+    QOpenGLFramebufferObject *renderfbo;//fbo used for render
+    QOpenGLContext *_context;
 
 
 };
